@@ -3,10 +3,16 @@
 ;; Source: http://changelog.complete.org/archives/661-so-long-vim-im-returning-to-emacs
 ;; Source: http://juanjoalvarez.net/es/detail/2014/sep/19/vim-emacsevil-chaotic-migration-guide/
 
-;; TODO Get 'gc' 'gcu' working for comment/uncomment (maybe need to port vim-commentary=https://github.com/tpope/vim-commentary)
-;; TODO Get 'TODO' 'XXX' 'FIXME' Highlighting in comments working
+;; TODO Look at Sunrise Commander -- Emacs mc-inspired file management
 ;; TODO ido-mode working with ':e <tab>' in evil-mode?
-;; TODO visual selection of a bunch of lines, then sort them
+
+;; Vim Conversion:
+;; ---------------
+;; - Visual select a bunch of lines, then sort them? In Emacs+Evil, do the same, but run "sort-lines" instead of "sort".
+;; - FIXME/XXX/TODO in comments? There is fic-mode, but it's rather limited. Plus the highlighting is not colorscheme-integrated, so it really looks off.
+;; - Get gc/gcu working for dealing with comments...
+;;   - Short term fix: bind 'gc' to 'comment-dwim'.
+;;   - Long term fix: Move to Evil port of NERD-Commenter?
 
 ;; The Basics
 ;; ----------
@@ -17,7 +23,7 @@
 (setq inhibit-startup-message t) ; no splash screen
 
 (setq dotfiles-dir (file-name-directory
-		    (or (buffer-file-name) load-file-name)))
+                    (or (buffer-file-name) load-file-name)))
 
 ;; TODO Figure out what's wrong with this. It's setup these way in the
 ;; github setup that I was based this off of, but my Emacs complains
@@ -41,10 +47,10 @@
 ;;; ---- Loading Packages ----
 
 (defvar required-packages
-  '(color-theme
-    color-theme-solarized
-    evil
+  '(solarized-theme
+    base16-theme
     magit
+    evil
     evil-surround
     evil-leader
     ido-vertical-mode)
