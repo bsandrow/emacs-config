@@ -2,3 +2,4 @@
 elpa/archives/*
 ido.last
 eshell/
+*.elc
