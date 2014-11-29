@@ -7,6 +7,16 @@
   (require 'evil-surround)
   (global-evil-surround-mode 1)
 
+  (defun wrap ()
+    "Enable line wrapping"
+    (interactive)
+    (setq truncate-lines nil))
+
+  (defun nowrap ()
+    "Disable line wrapping"
+    (interactive)
+    (setq truncate-lines t))
+
   ; use C-6 to swap to a previous buffer
   (define-key evil-normal-state-map (kbd "C-6") 'evil-buffer)
 

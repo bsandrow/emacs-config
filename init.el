@@ -3,13 +3,8 @@
 ;; Source: http://changelog.complete.org/archives/661-so-long-vim-im-returning-to-emacs
 ;; Source: http://juanjoalvarez.net/es/detail/2014/sep/19/vim-emacsevil-chaotic-migration-guide/
 
-;; TODO Look at Sunrise Commander -- Emacs mc-inspired file management
-;; TODO ido-mode working with ':e <tab>' in evil-mode?
-
 ;; Vim Conversion:
 ;; ---------------
-;; - Visual select a bunch of lines, then sort them? In Emacs+Evil, do the same, but run "sort-lines" instead of "sort".
-;; - FIXME/XXX/TODO in comments? There is fic-mode, but it's rather limited. Plus the highlighting is not colorscheme-integrated, so it really looks off.
 ;; - Get gc/gcu working for dealing with comments...
 ;;   - Short term fix: bind 'gc' to 'comment-dwim'.
 ;;   - Long term fix: Move to Evil port of NERD-Commenter?
@@ -21,6 +16,8 @@
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1)) ; Disable the scrollbar
 (global-linum-mode 1) ; line numbers on the left
 (setq inhibit-startup-message t) ; no splash screen
+
+(setq-default truncate-lines t) ; by default, don't wrap lines
 
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
@@ -39,9 +36,10 @@
 
 (require 'cl)
 (require 'package)
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")))
-;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(setq package-archives
+      '(("gnu" . "http://elpa.gnu.org/packages/")
+        ("marmalade" . "http://marmalade-repo.org/packages/")))
+        ;("melpa" . "http://melpa.org/packages/")))
 (package-initialize)
 
 ;;; ---- Loading Packages ----
@@ -62,12 +60,12 @@
 	finally (return t)))
 
 (unless (packages-installed-p)
-  ; check for new packages (package versions)
+  ;; check for new packages (package versions)
   (message "%s" "Emacs is now refreshing its package database...")
   (package-refresh-contents)
   (message "%s" " done.")
-  
-  ; install missing packages
+
+  ;; install missing packages
   (dolist (p required-packages)
     (when (not (package-installed-p p))
       (package-install p))))
