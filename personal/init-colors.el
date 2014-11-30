@@ -7,16 +7,15 @@
 ;; - http://www.emacswiki.org/emacs/?action=browse;oldid=ColorTheme;id=ColorAndCustomThemes
 ;; - https://github.com/sellout/emacs-color-theme-solarized/
 
-(let ((paths '("vendor/color-theme-ports"
-               "vendor/base16-themes")))
-     (dolist (element paths)
-       (add-to-list 'custom-theme-load-path
-                    (file-name-as-directory (concat dotfiles-dir element)))))
+(defun my-add-theme-load-path (path)
+  "Add a path to the custom-theme-load-path list."
+  (add-to-list 'custom-theme-load-path (file-name-as-directory path)))
 
-;; (add-to-list 'custom-theme-load-path
-;;              (file-name-as-directory (concat dotfiles-dir "vendor/color-theme-ports")))
+(defun my-add-vendor-theme (name)
+  "Add a theme path under the vendor/ directory to custom-theme-load-path."
+  (my-add-theme-load-path (concat dotfiles-dir "vendor/" name)))
 
-;; (add-to-list 'custom-theme-load-path
-;;              (file-name-as-directory (concat dotfiles-dir "vendor/base16-themes")))
+(mapc 'my-add-vendor-theme
+      '("color-theme-ports" "base16-themes"))
 
-(load-theme 'base16-flat-dark t)
+(load-theme 'base16-ocean-dark t)
