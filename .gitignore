@@ -3,3 +3,8 @@ elpa/archives/*
 ido.last
 eshell/
 *.elc
+.projectile
+history
+savehist
+recentf
+projectile.cache
