@@ -7,6 +7,9 @@
 ;; - http://www.emacswiki.org/emacs/?action=browse;oldid=ColorTheme;id=ColorAndCustomThemes
 ;; - https://github.com/sellout/emacs-color-theme-solarized/
 
+(require-package 'solarized-theme)
+(require-package 'base16-theme)
+
 (defun my-add-theme-load-path (path)
   "Add a path to the custom-theme-load-path list."
   (add-to-list 'custom-theme-load-path (file-name-as-directory path)))
