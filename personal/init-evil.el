@@ -99,6 +99,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
+;; Get C-w in the minibuffer.
+;;
+(define-key minibuffer-local-map "\C-w" 'evil-delete-backward-word)
+(define-key minibuffer-local-ns-map "\C-w" 'evil-delete-backward-word)
+(define-key minibuffer-local-completion-map "\C-w" 'evil-delete-backward-word)
+(define-key minibuffer-local-must-match-map "\C-w" 'evil-delete-backward-word)
+(define-key minibuffer-local-isearch-map "\C-w" 'evil-delete-backward-word)
+
 ;; -!- Replace tpope's vim-commentary -!-
 ;;
 ;; TODO missing the 'gcu' binding to uncomment a region without a visual selection
