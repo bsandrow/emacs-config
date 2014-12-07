@@ -22,3 +22,4 @@
       '("color-theme-ports" "base16-themes"))
 
 (load-theme 'base16-ocean-dark t)
+(load-theme 'base16-flat-dark t)
