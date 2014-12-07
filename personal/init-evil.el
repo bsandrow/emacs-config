@@ -42,6 +42,12 @@
 ;(evil-leader/set-key "be" 'switch-to-buffer)
 (evil-leader/set-key "be" 'ibuffer)
 
+;; Having a M-x binding that allows for some auto-completion is always
+;; good. I can just use evil-ex-mode for the times when I don't care
+;; about auto-completion.
+(require 'helm-config)
+(evil-leader/set-key "xm" 'helm-M-x)
+
 ;; Nothing emulates Vim's CtrlP plugin yet, but binding file-file to
 ;; C-p will help me with my muscle memory. I may just need to wrap
 ;; find-file with something that acts more CtrlP-like when I'm in a
