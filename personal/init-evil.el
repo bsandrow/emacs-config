@@ -73,6 +73,7 @@
 (evil-leader/set-key "d" 'dired-jump)
 (evil-leader/set-key "k" 'ido-kill-buffer)
 (evil-leader/set-key "u" 'undo-tree-visualize)
+(evil-leader/set-key "f" 'ack)
 
 ;; Eval Bindings
 (evil-leader/set-key "ee" 'eval-last-sexp)
