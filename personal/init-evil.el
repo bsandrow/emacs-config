@@ -72,6 +72,7 @@
 ;; Misc <Leader> bindings to regular Emacs stuff
 (evil-leader/set-key "d" 'dired-jump)
 (evil-leader/set-key "k" 'ido-kill-buffer)
+(evil-leader/set-key "u" 'undo-tree-visualize)
 
 ;; Eval Bindings
 (evil-leader/set-key "ee" 'eval-last-sexp)
