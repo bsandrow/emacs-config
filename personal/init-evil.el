@@ -53,7 +53,8 @@
 ;; find-file with something that acts more CtrlP-like when I'm in a
 ;; repository, otherwise it will just do the regular find-file (with
 ;; ido-mode).
-(define-key evil-normal-state-map "\C-p" 'ido-find-file)
+;(define-key evil-normal-state-map "\C-p" 'ido-find-file)
+(define-key evil-normal-state-map "\C-p" 'my-find-file)
 
 (defun wrap ()
   "Enable line wrapping"
