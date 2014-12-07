@@ -104,7 +104,9 @@
       (package-refresh-contents))
     (package-install package)))
 
+;(require-package 'vc-darcs) <= ibuffer-vc uses this for darcs
 (require-package 'ibuffer)
+(require-package 'ibuffer-vc)
 (require-package 'magit)
 (require-package 'ido-vertical-mode)
 (require-package 'projectile)

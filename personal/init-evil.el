@@ -99,6 +99,10 @@
      (evil-define-key 'normal ibuffer-mode-map "j" 'ibuffer-forward-line)
      (evil-define-key 'normal ibuffer-mode-map "k" 'ibuffer-backward-line)
      (evil-define-key 'normal ibuffer-mode-map "J" 'ibuffer-jump-to-buffer) ; "j"
+     (evil-define-key 'normal ibuffer-mode-map "/" 'evil-search-forward)
+     (evil-define-key 'normal ibuffer-mode-map "n" 'evil-search-next)
+     (evil-define-key 'normal ibuffer-mode-map "N" 'evil-search-previous)
+     (evil-define-key 'normal ibuffer-mode-map "?" 'evil-search-backward)
    ))
 
 ;; --------------
