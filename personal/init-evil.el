@@ -72,7 +72,11 @@
 ;; Misc <Leader> bindings to regular Emacs stuff
 (evil-leader/set-key "d" 'dired-jump)
 (evil-leader/set-key "k" 'ido-kill-buffer)
-(evil-leader/set-key "e" 'eval-last-sexp)
+
+;; Eval Bindings
+(evil-leader/set-key "ee" 'eval-last-sexp)
+(evil-leader/set-key "er" 'eval-region)
+(evil-leader/set-key "ef" 'eval-defun)
 
 ;; make Esc quit everything
 (define-key evil-normal-state-map [escape] 'keyboard-quit)
