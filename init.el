@@ -93,6 +93,7 @@
 (setq package-user-dir (concat dotfiles-dir "elpa"))
 (setq custom-file (concat dotfiles-dir "custom.el"))
 
+
 ;; --------------
 ;; Emacs Packages
 ;; --------------
@@ -124,6 +125,11 @@
 (require-package 'projectile)
 (require-package 'flx)
 (require-package 'flx-ido)
+(require-package 'git-commit-mode)
+(require-package 'git-rebase-mode)
+(require-package 'gitconfig-mode)
+(require-package 'gitignore-mode)
+(require-package 'gitattributes-mode)
 
 ;; ---------------
 ;; Personal Config
