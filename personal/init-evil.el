@@ -178,7 +178,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   "zO"        'show-all
   "zc"        'hide-subtree
   "zC"        'hide-all
+  ; ",le"       'org-insert-link ; TODO integrate with evil-leader
   )
+
+(evil-leader/set-key-for-mode 'org-mode "le" 'org-insert-link)
 
 (evil-define-key 'normal orgstruct-mode-map
   (kbd "RET") 'org-open-at-point
@@ -190,6 +193,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   "zO"        'show-all
   "zc"        'hide-subtree
   "zC"        'hide-all
+  ; ",le"       'org-insert-link ; TODO integrate with evil-leader
   )
+
+(evil-leader/set-key-for-mode 'orgstruct-mode "le" 'org-insert-link)
 
 ;; init-evil.el ends here
