@@ -122,6 +122,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (evil-set-initial-state 'ibuffer-mode 'normal)
 
+;; Ace Jump Mode
+(evil-leader/set-key "jl" 'ace-jump-line-mode)
+(evil-leader/set-key "jw" 'ace-jump-word-mode)
+(evil-leader/set-key "jc" 'ace-jump-char-mode)
+
 ;; iBuffer setup
 (eval-after-load 'ibuffer
   '(progn

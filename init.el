@@ -159,3 +159,6 @@
 ;; (add-hook 'after-init-hook (lambda ()
 ;;                              (maximize-frame)
 ;;                              (emacs-reloaded)))
+
+(require-package 'ace-jump-mode)
+(require 'ace-jump-mode)
