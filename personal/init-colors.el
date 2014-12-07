@@ -23,3 +23,12 @@
 
 (load-theme 'base16-ocean-dark t)
 (load-theme 'base16-flat-dark t)
+
+;; rainbow-delimters mode
+;; ======================
+;; Highlight delimiter pairs with different colors depending on their
+;; depth.
+;;
+(require-package 'rainbow-delimiters)
+(require 'rainbow-delimiters)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
