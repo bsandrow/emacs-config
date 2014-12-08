@@ -15,9 +15,8 @@
 (defun add-to-exec-path (new-path)
   "Add NEW-PATH to EXEC-PATH"
   (when (and (file-accessible-directory-p new-path)
-             (not (member new-path exec-path)))
-    (setenv "PATH" (concat (getenv "PATH") ":" new-path))
-    (setq exec-path (append exec-path '(new-path)))))
+             (not (member 'new-path exec-path)))
+    (add-to-list 'exec-path new-path)))
 
 (add-to-exec-path "/usr/local/bin")
 
