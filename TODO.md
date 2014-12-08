@@ -1,3 +1,19 @@
+## Upgrades
+
+### Pomodoro
+
+- Inspired by: https://github.com/rodw/.dotfiles/blob/master/emacs/.rods-dot-emacs.org#pomodoro
+- Started here: http://www.emacswiki.org/emacs/pomodoro
+- Got here: http://ivan.kanis.fr/pomodoro.el
+  - Which has the same variables as the 'inspired by' config, so is probably the same library
+
+    ```
+    $ cd ~/.emacs.d/vendor && wget 'http://ivan.kanis.fr/pomodoro.el'
+    ``` 
+
+- Turns out that this is the one used:
+  https://github.com/baudtack/pomodoro.el/blob/master/pomodoro.el 
+
 ## Items to Look Into:
 
 - How do I toggle the line-wrap gutter?
