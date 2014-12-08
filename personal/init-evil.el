@@ -18,17 +18,27 @@
 (require-package 'evil-surround)
 (global-evil-surround-mode 1)
 
+;; Evil Ex Commands
+;; ================
+;;
 ;; I'm used to using :sort all of the time in Vim, so let's alias
 ;; :sort to :sort-lines for convenience. Huzzah!
 (evil-ex-define-cmd "sort" 'sort-lines)
 
-;; Set up evil-mode <Leader>.
-;; Use "," as the leader. "," is already mapped to something useful,
-;; so let's remap that to ",," so as not to use it.
+;; Quickly enable/disable line wrapping
+(evil-ex-define-cmd "wrap" (lambda () (setq truncate-lines nil)))
+(evil-ex-define-cmd "nowrap" (lambda () (setq truncate-lines t)))
+
+;; Evil Leader Bindings (Global)
+;; =============================
+
+;; Initial <Leader> setup.
 (evil-leader/set-leader ",")
+
+;; Don't throw away the ',' binding. Now it's just ',,' instead.
 (evil-leader/set-key "," 'evil-repeat-find-char-reverse)
 
-;; I have this bound in Vim, so here it is to. mneumonic: Remove Whitespace
+;; mneumonic: Remove Whitespace
 (evil-leader/set-key "rw" 'delete-trailing-whitespace)
 
 ;; My natural tendency for buffer switching is to hit ,be which I
@@ -48,6 +58,25 @@
 (require 'helm-config)
 (evil-leader/set-key "xm" 'helm-M-x)
 
+(evil-leader/set-key
+  "d" 'dired-jump ; open current dir in dired-mode
+  "k" 'ido-kill-buffer ; kill buffer
+  "u" 'undo-tree-visualize ; show the undo-tree
+  "f" 'ack ; use ack to search through files
+
+  ;; -- eval bindings --
+  "ee" 'eval-last-sexp
+  "er" 'eval-region
+  "ef" 'eval-defun
+
+  ;; -- ace jump mode --
+  "jl" 'ace-jump-line-mode
+  "jw" 'ace-jump-word-mode
+  "jc" 'ace-jump-char-mode)
+
+;; Global Evil Bindings
+;; ====================
+
 ;; Nothing emulates Vim's CtrlP plugin yet, but binding file-file to
 ;; C-p will help me with my muscle memory. I may just need to wrap
 ;; find-file with something that acts more CtrlP-like when I'm in a
@@ -56,33 +85,16 @@
 ;(define-key evil-normal-state-map "\C-p" 'ido-find-file)
 (define-key evil-normal-state-map "\C-p" 'my-find-file)
 
-(defun wrap ()
-  "Enable line wrapping"
-  (interactive)
-  (setq truncate-lines nil))
-
-(defun nowrap ()
-  "Disable line wrapping"
-  (interactive)
-  (setq truncate-lines t))
-
 ; use C-6 to swap to a previous buffer
-(define-key evil-normal-state-map (kbd "C-6") 'evil-buffer)
-
-;; Misc <Leader> bindings to regular Emacs stuff
-(evil-leader/set-key "d" 'dired-jump)
-(evil-leader/set-key "k" 'ido-kill-buffer)
-(evil-leader/set-key "u" 'undo-tree-visualize)
-(evil-leader/set-key "f" 'ack)
-
-;; Eval Bindings
-(evil-leader/set-key "ee" 'eval-last-sexp)
-(evil-leader/set-key "er" 'eval-region)
-(evil-leader/set-key "ef" 'eval-defun)
+(define-key evil-normal-state-map "\C-6" 'evil-buffer)
 
 ;; make Esc quit everything
 ;; source: https://github.com/davvil/.emacs.d/blob/64367f2/init.el#L19
 
+;; Escape Key
+;; ==========
+;; Make it cancel everything...
+;;
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
 In Delete Selection mode, if the mark is active, just deactivate it;
@@ -101,6 +113,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
+;; The Minibuffer
+;; ==============
+;;
 ;; Get C-w in the minibuffer.
 ;;
 (define-key minibuffer-local-map "\C-w" 'evil-delete-backward-word)
@@ -109,9 +124,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key minibuffer-local-must-match-map "\C-w" 'evil-delete-backward-word)
 (define-key minibuffer-local-isearch-map "\C-w" 'evil-delete-backward-word)
 
-;; -!- Replace tpope's vim-commentary -!-
+;; vim-commentary
+;; ==============
+;; Replace tpope's vim-commentary
 ;;
-;; TODO missing the 'gcu' binding to uncomment a region without a visual selection
+;; TODO missing the 'gcu' binding to uncomment a region without a
+;; visual selection
+;;
 (defun evil-comment-dwim ()
   (interactive)
   "Like 'comment-dwim', but switches to Insert state when inserting a comment and not operating on a region."
@@ -123,12 +142,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (evil-set-initial-state 'ibuffer-mode 'normal)
 
-;; Ace Jump Mode
-(evil-leader/set-key "jl" 'ace-jump-line-mode)
-(evil-leader/set-key "jw" 'ace-jump-word-mode)
-(evil-leader/set-key "jc" 'ace-jump-char-mode)
-
-;; iBuffer setup
+;; IbuferMode Keys
+;; ===============
+;;
 (eval-after-load 'ibuffer
   '(progn
      ;; use the standard ibuffer bindings as a base
@@ -143,10 +159,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
      (evil-define-key 'normal ibuffer-mode-map "?" 'evil-search-backward)
    ))
 
-;; --------------
-;; org-mode stuff
-;; --------------
-
+;; org-mode Mappings
+;; =================
+;;
 ;; Note: I don't like these bindings, but I'll deal with them. My
 ;; preferred bindings would be:
 ;;
@@ -175,6 +190,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;; zk => Move upwards to the next fold. (upwards in relation to the
 ;;       file, not the fold level)
 
+(evil-leader/set-key-for-mode 'org-mode "le" 'org-insert-link)
+(evil-leader/set-key-for-mode 'orgstruct-mode "le" 'org-insert-link)
+
 (evil-define-key 'normal org-mode-map
   (kbd "RET") 'org-open-at-point
   "za"        'org-cycle
@@ -185,10 +203,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   "zO"        'show-all
   "zc"        'hide-subtree
   "zC"        'hide-all
-  ; ",le"       'org-insert-link ; TODO integrate with evil-leader
   )
-
-(evil-leader/set-key-for-mode 'org-mode "le" 'org-insert-link)
 
 (evil-define-key 'normal orgstruct-mode-map
   (kbd "RET") 'org-open-at-point
@@ -200,9 +215,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   "zO"        'show-all
   "zc"        'hide-subtree
   "zC"        'hide-all
-  ; ",le"       'org-insert-link ; TODO integrate with evil-leader
   )
 
-(evil-leader/set-key-for-mode 'orgstruct-mode "le" 'org-insert-link)
 
 ;; init-evil.el ends here
