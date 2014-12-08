@@ -2,6 +2,7 @@
 
 (require 'ido)
 (require 'ido-vertical-mode)
+(require 'flx-ido)
 (ido-mode t)
 (setq ido-enable-flex-matching t)
 (ido-vertical-mode t)
