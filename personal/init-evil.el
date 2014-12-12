@@ -217,5 +217,4 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   "zC"        'hide-all
   )
 
-
 ;; init-evil.el ends here
