@@ -19,10 +19,12 @@
   (my-add-theme-load-path (concat dotfiles-dir "vendor/" name)))
 
 (mapc 'my-add-vendor-theme
-      '("color-theme-ports" "base16-themes"))
+      '("color-theme-ports" "base16-themes"
+        "emacs-spacegray-theme"))
 
-(load-theme 'base16-ocean-dark t)
-(load-theme 'base16-flat-dark t)
+;(load-theme 'base16-ocean-dark t)
+;(load-theme 'base16-flat-dark t)
+(load-theme 'spacegray t)
 
 ;; rainbow-delimters mode
 ;; ======================
