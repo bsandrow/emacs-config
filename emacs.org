@@ -37,12 +37,49 @@ into the =~/.emacs.d/init.el= file:
 
 ** Gotchas
 
+This is my section for taking notes on issues that crop up when using
+=.org= files to load my Emacs config.
+
+*** Source Blocks While =eval='ing .org files
+
 Source blocks need to be marked as =emacs-lisp=. I've seen some
 people's configs marked as =elisp=, but that has caused me a lot of
 trouble. For starters, =org-babel-load-file= blows up because it
 passes =nil= to =load-file=. This happens because =org-babel-tangle=
 seems to require =:tangle on= for blocks that are in languages other
 than =emacs-lisp=.
+
+* Emacs Lisp Notes
+
+** Using variables in alists
+
+Use need to use backtick rather than quote. This allows you to use a
+comma to force evaluation of the variable. For example, starting with
+this:
+
+#+begin_src emacs-lisp
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+#+end_src
+
+One might (naively) end up with this:
+
+#+begin_src emacs-lisp
+(setq backup-dir (expand-file-name "backups" dotfiles-dir))
+(setq backup-directory-alist '(("." . backup-dir)))
+#+end_src
+
+This fails though, because =backup-dir= has not been evaluated. We
+need to do something like this:
+
+#+begin_src emacs-lisp
+(setq backup-dir (expand-file-name "backups" dotfiles-dir))
+(setq backup-directory-alist `(("." . ,backup-dir)))
+#+end_src
+
+The backtick quotes the section like the quote did, but it also uses
+hints like ',' to evaluate variables.
+
+Source: [[http://stackoverflow.com/questions/1664202/emacs-lisp-evaluate-variable-in-alist][Stack Overflow: Emacs Lisp Evaluate Variable in alist]]
 
 * Initialization
 ** Files and Directories
@@ -207,34 +244,47 @@ Sources:
 - https://github.com/juanjux/emacs-dotfiles/blob/master/init.el
 
 * Support Functions
-  
-*TODO* Breakup/Organize/Explain
 
-#+begin_src emacs-lisp :tangle no
-;; global replace-regexp
+** Buffer Global replace-regexp
+
+By default =replace-regexp= only replaces from the current cursor
+position to the end of the file. This provides a way to run a replace
+on the whole buffer.
+
+#+begin_src emacs-lisp
 (defun replace-regexp-g ()
+  "Run replace-regexp on the whole buffer"
   (interactive)
   (save-excursion
     (goto-char 0)
     (call-interactively 'replace-regexp)))
+#+end_src
 
-;; Convert DOS newlines (\r\n) to Unix newlines (\n) (and the reverse).
-;;
-;; SOURCE:
-;; https://github.com/redguardtoo/emacs.d/blob/7cbd20004ac7d231274df04165e4b424999165b8/lisp/init-misc.el#L350
+** Newline Conversion
+
+Some convenience function to dealing with converting newline types on
+a file. I grabbed it from [[https://github.com/redguardtoo/emacs.d/blob/7cbd20004ac7d231274df04165e4b424999165b8/lisp/init-misc.el#L350][here]].
+
+#+begin_src emacs-lisp
 (defun dos2unix ()
+  "Convert DOS newlines (\r\n) to Unix newlines (\n)"
   (interactive)
   (goto-char (point-min))
   (while (search-forward "\r" nil t) (replace-match "")))
 
 (defun unix2dos ()
+  "Convert Unix newlines (\n) to DOS newlines (\r\n)"
   (interactive)
   (goto-char (point-min))
   (while (search-forward "\n" nil t) (replace-match "\r\n")))
 
-;; show ascii table
-;;
-;; SOURCE: https://github.com/redguardtoo/emacs.d/blob/7cbd20004ac7d231274df04165e4b424999165b8/lisp/init-misc.el#L362
+#+end_src
+
+** Show ASCII Table
+
+Pull up a buffer for displaying the ASCII table. ([[https://github.com/redguardtoo/emacs.d/blob/7cbd20004ac7d231274df04165e4b424999165b8/lisp/init-misc.el#L362][source]])
+
+#+begin_src emacs-lisp
 (defun ascii-table ()
   "Print the ascii table. Based on a defun by Alex Schroeder <asc@bsiag.com>"
   (interactive)
