@@ -1215,14 +1215,15 @@ Configure Emacs for editting Python.
 * Text Editing
 ** Markdown
 
-Configure =markdown-mode=.
+Use =markdown-mode= to edit Markdown files.
 
 #+begin_src emacs-lisp
-(autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
-;(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.mkd\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+  (use-package markdown-mode
+    :commands markdown-mode
+    :mode (("\\.markdown\\'" . markdown-mode)
+           ("\\.mkd\\'" . markdown-mode)
+           ;("\\.text\\'" . markdown-mode)
+           ("\\.md\\'" . markdown-mode)))
 #+end_src
 * Advanced Stuff
 ** Edit With Emacs
