@@ -694,6 +694,10 @@ Install / Configure color themes. :)
 Configuration:
 
 #+begin_src emacs-lisp
+  ;; Note: I'm not sure how packages-install and use-package will
+  ;; interact. packages-install doesn't do anything if the packages
+  ;; are already installed, but if it needs to install them, it also
+  ;; loads them IIRC. I'm not sure how use-package will handle that.
   (packages-install '(ibuffer ibuffer-vc))
 
   (defun my-ibuffer-vc-hook ()
@@ -709,28 +713,29 @@ Configuration:
               (add-hook 'ibuffer-hook 'my-ibuffer-vc-hook)))
 #+end_src
 
-Other Stuff:
+*TODO*:
 
-#+begin_src emacs-lisp
-;; Source: http://emacs-fu.blogspot.ca/2010/02/dealing-with-many-buffers-ibuffer.html
-;;
-;; (setq ibuffer-saved-filter-groups
-;;       (quote (("default"
-;;                ("Org" (mode . org-mode))
-;;              ))
-;;       )
-;; )
+- Implement some non-Version Control based groups. There are examples [[http://emacs-fu.blogspot.ca/2010/02/dealing-with-many-buffers-ibuffer.html][here]], but
+  they conflict with =ibuffer-vc=. (They are both vying for control over
+  =ibuffer-saved-filter-groups=).
 
-;; Future:
-;;    - Interface to switch between saved filter groups
-;;      - Special-case for ibuffer-vc generated groups
-;;      - Use ido completion
-;;      - Default to ibuffer-vc (since it's auto-generated, it will
-;;        probably apply in more cases).
-;;    - Maybe a way to cycle through all of the saved filter groups (+
-;;      ibuffer-vc). I'm less bullish on this than I am on the ido
-;;      inferface.
+#+begin_src emacs-lisp :tangle no
+(setq ibuffer-saved-filter-groups
+      (quote (("default"
+               ("Org" (mode . org-mode))
+             ))
+      )
+)
 #+end_src
+
+- Interface to switch between saved filter groups
+  - Special-case for ibuffer-vc generated groups
+  - Use ido completion
+  - Default to ibuffer-vc (since it's auto-generated, it will
+    probably apply in more cases).
+- Maybe a way to cycle through all of the saved filter groups (+
+  ibuffer-vc). I'm less bullish on this than I am on the ido
+  inferface.
 
 ** Ido mode
 
