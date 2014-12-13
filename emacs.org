@@ -406,7 +406,7 @@ Sources:
 (setq scroll-step 1) ; keyboard scroll one line at a time
 #+end_src
 ** Frames
-   
+
 This allows one to toggle usage of OSX's native full screen
 behaviour. Stumbled across this [[http://crypt.codemancers.com/posts/2013-07-05-non-native-fullscreen-for-osx-on-emacs-24-dot-3/][in a blog post]].
 
@@ -471,7 +471,7 @@ Note: If one of the dimensions is already maxed, it will be toggled
 Configure tabs / indentation:
 
 *TODO* More explanation here.
-   
+
 #+begin_src emacs-lisp
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4) ; or any other preferred value
@@ -481,7 +481,7 @@ Configure tabs / indentation:
 (defvaralias 'cperl-indent-level 'tab-width)
 (setq-default py-indent-offset 4)
 #+end_src
-   
+
 ** Trailing Newline
 
 #+begin_src emacs-lisp
@@ -499,7 +499,7 @@ Configure tabs / indentation:
    #+end_src
 
 * Display Settings
-  
+
   A number of the default settings should just be disabled as they
   tend to get in the way.
 
@@ -545,7 +545,7 @@ Configure tabs / indentation:
   #+end_src
 
 ** Fonts
-   
+
 Set the default font. =ns= is Mac OSX Cocoa / NeXTStep.
 
 #+begin_src emacs-lisp
@@ -556,7 +556,7 @@ Set the default font. =ns= is Mac OSX Cocoa / NeXTStep.
            (otherwise "DejaVu Sans Mono-11"))))
     (set-face-attribute 'default nil :font font)))
 #+end_src
-   
+
 Old Code:
 
 #+begin_src emacs-lisp :tangle no
@@ -592,15 +592,15 @@ Old Code:
 ;; (add-hook 'c++-mode-hook 'turn-on-fic-mode)
 ;; (add-hook 'emacs-lisp-mode-hook 'turn-on-fic-mode)
 #+end_src
-   
+
 *TODO* Need to work on the appearance of highlighting red-on-yellow
 bolded and underlined is a bit garrish.
-   
+
 *Sources:*
 - http://www.emacswiki.org/emacs/fic-mode.el
 - http://trey-jackson.blogspot.ca/2010/10/emacs-tip-37-fic-modeel.html
 ** Column Marker Mode
-   
+
 This doesn't work so well. It highlights the character that crosses
 the boundary, doesn't show a vertical line indicating where the
 boundary is on all lines. (This is what I want.)
@@ -628,7 +628,7 @@ up. Not rocket science... :)
 #+end_src
 
 ** Rainbow Delimiters Mode
-	
+
 =rainbow-delimiters-mode= hightlights delimiter pairs in increasing
 depth with different colors. So far I find this useful in Emacs Lisp.
 
@@ -689,7 +689,7 @@ Configuration:
 #+end_src
 
 Other Stuff:
-   
+
 #+begin_src emacs-lisp
 ;; Source: http://emacs-fu.blogspot.ca/2010/02/dealing-with-many-buffers-ibuffer.html
 ;;
@@ -712,12 +712,12 @@ Other Stuff:
 #+end_src
 
 ** Ido mode
-   
+
 #+begin_src emacs-lisp
 (require 'ido)
 (ido-mode t)
 #+end_src
-   
+
 I prefer my matches to be shown vertically (like Vim's [[https://github.com/kien/ctrlp.vim][CtrlP]] or
 [[https://bitbucket.org/ns9tks/vim-fuzzyfinder/][FuzzyFinder]]). I use =ido-vertical-mode= to do this. It's the 'best'
 solution thus far, but I would prefer if cycling through entries in
@@ -856,7 +856,7 @@ Make Emacs a little more *evil*...
 #+end_src
 
 ** Evil Ex Commands
-   
+
 Emulate Vim's =:sort= command:
 
 #+begin_src emacs-lisp
@@ -874,7 +874,7 @@ Emulate Vim's =:set wrap= and =:set nowrap=:
 #+end_src
 
 ** Evil Leader Configuration
-   
+
 Set the =<Leader>=:
 
 #+begin_src emacs-lisp
@@ -940,7 +940,7 @@ Other bindings:
 #+end_src
 
 ** Evil Global Keybindings
-   
+
 Bind =C-p= to =my-find-file= so that we can get =CtrlP=-like
 functionality, just like in Vim!
 
@@ -965,7 +965,7 @@ this ourselves:
 #+end_src
 
 ** The =Escape= Key
-   
+
 Make the =escape= key cancel all the things.
 
 Sources:
@@ -1030,9 +1030,9 @@ it just makes sense (to me).
 (define-key evil-normal-state-map (kbd "gc") #'evil-comment-dwim)
 
 #+end_src
-   
+
 ** =ibuffer-mode=
-   
+
 Configure =evil-mode= and =ibuffer-mode= to work together.
 
 #+begin_src emacs-lisp
@@ -1147,7 +1147,7 @@ Configure Emacs for editting Python.
 #+end_src
 
 ** JavaScript
-   
+
 *TODO* Break this up with some explanation.
 
 #+begin_src emacs-lisp
@@ -1208,7 +1208,7 @@ Configure =markdown-mode=.
 #+end_src
 * Advanced Stuff
 ** Edit With Emacs
-   
+
 Edit with Emacs is a Chrome extension that allows you to edit text
 from Chrome in Emacs, and then save it back to Chrome. It pairs with a
 server to communicate with. In this case, I have setup the elisp
