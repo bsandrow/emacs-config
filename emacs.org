@@ -707,8 +707,6 @@ Configuration:
     :config (progn
               (require 'ibuffer-vc)
               (add-hook 'ibuffer-hook 'my-ibuffer-vc-hook)))
-
-  ;(packages-install '(ibuffer ibuffer-vc))
 #+end_src
 
 Other Stuff:
