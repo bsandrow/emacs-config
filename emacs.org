@@ -908,9 +908,9 @@ hitting =C-6= to switch back and forth between two
 buffers. =evil-mode= doesn't implement this, so we need to implement
 this ourselves:
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 ;; use C-6 to swap to a previous buffer
-(define-key evil-normal-state-map "\C-6" 'evil-buffer)
+(define-key evil-normal-state-map (kbd "C-6") 'evil-buffer)
 #+end_src
 
 ** The =Escape= Key
