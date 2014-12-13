@@ -1152,16 +1152,12 @@ Configure Emacs for editting Python.
 - *TODO* More explanation
 
 #+begin_src emacs-lisp
-;; (add-to-list 'load-path (expand-file-name "python-mode.el-6.2.0" vendor-dir))
-;; (autoload 'python-mode "python-mode" "Python Mode." t)
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-(add-to-list 'interpreter-mode-alist '("python" . python-mode))
+  ;; http://www.emacswiki.org/emacs/ProgrammingWithPythonModeDotEl
+  ;; (add-to-list 'load-path (expand-file-name "python-mode.el-6.2.0" vendor-dir))
 
-;; ;; Yanked from the Emacs Wiki
-;; ;; - http://www.emacswiki.org/emacs/ProgrammingWithPythonModeDotEl
-;; (autoload 'python-mode "python-mode" "Python Mode." t)
-;; (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-;; (add-to-list 'interpreter-mode-alist '("python" . python-mode))
+  (use-package python-mode
+    :mode ("\\.py\\'" . python-mode)
+    :interpreter ("python" . python-mode))
 #+end_src
 
 ** JavaScript
