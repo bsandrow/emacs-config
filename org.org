@@ -1,0 +1,28 @@
+#+TITLE: Emacs Org-Mode Settings
+#+AUTHOR: Brandon Sandrowicz
+#+EMAIL: brandon@sandrowicz.org
+#+TAGS: emacs
+
+#+begin_src emacs-lisp
+(packages-install '(org))
+#+end_src
+
+* Org-Mode Babel
+  
+Load extra languages. So far I've only used Python, but I'll probably
+add more here as time goes on:
+
+#+begin_src emacs-lisp
+(org-babel-do-load-languages 'org-babel-load-languages
+                             '((python . t)))
+#+end_src
+
+* Org-Mode Colors
+  
+** Source Blocks
+
+Highlight source blocks natively:
+
+#+begin_src emacs-lisp
+(setq org-src-fontify-natively t)
+#+end_src
