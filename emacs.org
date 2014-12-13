@@ -1162,7 +1162,8 @@ Configure Emacs for editting Python.
 
 ** JavaScript
 
-*TODO* Break this up with some explanation.
+Use =js2-mode= for JavaScript. (Note: I should probably break this up
+a bit with some explanation.)
 
 #+begin_src emacs-lisp
   (use-package js2-mode
