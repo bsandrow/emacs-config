@@ -908,10 +908,10 @@ Create a generic binding for removing trailing whitespace:
 (evil-leader/set-key "rw" 'delete-trailing-whitespace)
 #+end_src
 
-My natural tendency for buffer switching is to hit =\,be= which I have
+My natural tendency for buffer switching is to hit =<,be>= which I have
 bound to [[http://www.vim.org/scripts/script.php?script_id=42][BufferExplorer]] in Vim. The functionality of =switch-to-buffer=
-isn't the same, but the general idea that I automatically hit ,be when
-I want to switch a buffer remains.
+isn't the same, but the general idea that I automatically hit =<,be>=
+when I want to switch a buffer remains.
 
 That said, =switch-to-buffer= (with =ido-mode=) is probably better
 than BufferExplorer, though the ability to see a _complete_ list of
