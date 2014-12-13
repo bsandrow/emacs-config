@@ -180,6 +180,11 @@ don't match the predicate."
 Packages:
 
 #+begin_src emacs-lisp
+(packages-install '(use-package))
+(require 'use-package)
+#+end_src
+
+#+begin_src emacs-lisp
 (packages-install '(vc-darcs
                     ibuffer
                     ibuffer-vc
@@ -1246,10 +1251,14 @@ Config:
 #+end_src
 
 ** Ace Jump Mode
+   
+Load up =ace-jump-mode= for jumping around my buffer. I haven't used
+this much yet, but it seems like it could be useful if I ever get
+myself into using it more regularly.
 
 #+begin_src emacs-lisp
-(packages-install '(ace-jump-mode))
-(require 'ace-jump-mode)
+  (use-package ace-jump-mode
+    :commands ace-jump-mode)
 #+end_src
 
 The rest of the configuration is in =evil-mode= config right now...
