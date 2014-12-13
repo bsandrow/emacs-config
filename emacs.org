@@ -694,16 +694,21 @@ Install / Configure color themes. :)
 Configuration:
 
 #+begin_src emacs-lisp
-(packages-install '(ibuffer ibuffer-vc))
+  (packages-install '(ibuffer ibuffer-vc))
 
-(require 'ibuffer)
-(require 'ibuffer-vc)
+  (defun my-ibuffer-vc-hook ()
+    (ibuffer-vc-set-filter-groups-by-vc-root)
+    (unless (eq ibuffer-sorting-mode 'alphabetic)
+      (ibuffer-do-sort-by-alphabetic)))
 
-(add-hook 'ibuffer-hook
-          (lambda ()
-            (ibuffer-vc-set-filter-groups-by-vc-root)
-            (unless (eq ibuffer-sorting-mode 'alphabetic)
-              (ibuffer-do-sort-by-alphabetic))))
+  (use-package ibuffer
+    :commands ibuffer-mode
+    :defer 1
+    :config (progn
+              (require 'ibuffer-vc)
+              (add-hook 'ibuffer-hook 'my-ibuffer-vc-hook)))
+
+  ;(packages-install '(ibuffer ibuffer-vc))
 #+end_src
 
 Other Stuff:
