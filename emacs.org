@@ -1165,47 +1165,44 @@ Configure Emacs for editting Python.
 *TODO* Break this up with some explanation.
 
 #+begin_src emacs-lisp
-;; Initial Config
-;; --------------
-;; Note: Some of these must be set *before* js2-mode is loaded.
-;;
-(setq js-basic-indent 2)
-(setq-default js2-basic-indent 2)
-(setq-default js2-basic-offset 2)
-(setq-default js2-auto-indent-p t)
-(setq-default js2-cleanup-whitespace t)
-(setq-default js2-enter-indents-newline t)
-(setq-default js2-indent-on-enter-key t)
-;(setq-default js2-mode-indent-ignore-first-tab t)
+  (use-package js2-mode
+    :mode ("\\.js\\'" . js2-mode)
+    :pre-load
+    (progn
+      (setq js-basic-indent 2)
+      (setq-default js2-basic-indent 2)
+      (setq-default js2-basic-offset 2)
+      (setq-default js2-auto-indent-p t)
+      (setq-default js2-cleanup-whitespace t)
+      (setq-default js2-enter-indents-newline t)
+      (setq-default js2-indent-on-enter-key t)
+      ;(setq-default js2-mode-indent-ignore-first-tab t)
 
-(setq-default js2-global-externs '("assert" "refute" "setTimeout"
-                                   "clearTimeout" "setInterval"
-                                   "clearInterval" "console" "JSON"
-                                   "jQuery" "$" "angular" "Ember"))
+      ;; Let flymake do the error-parsing
+      ;;(setq-default js2-show-parse-errors nil)
 
-;; Let flymake do the error-parsing
-;(setq-default js2-show-parse-errors nil)
+      (setq-default js2-global-externs
+                    '("assert" "refute" "setTimeout"
+                      "clearTimeout" "setInterval"
+                      "clearInterval" "console" "JSON"
+                      "jQuery" "$" "angular" "Ember"))
 
-;; TODO What does this do:
-(setq js2-mode-toggle-warnings-and-errors t)
+      ;; TODO What does this do:
+      (setq js2-mode-toggle-warnings-and-errors t))
 
-;; Loading...
-;; ----------
-(packages-install '(js2-mode))
-;; (autoload 'js2-mode "js2" nil t)
-(require 'js2-mode)
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+    :config
+    (progn
+      ;; Replace 'function' with 'ƒ'
+      (font-lock-add-keywords
+       'js2-mode
+       `(("\\(function *\\)("
+          (0 (progn (compose-region (match-beginning 1) (match-end 1) "ƒ") nil)))))
 
-;; Misc
-;; ----
-(font-lock-add-keywords 'js2-mode
-                        `(("\\(function *\\)("
-                           (0 (progn (compose-region (match-beginning 1) (match-end 1) "ƒ")
-                                     nil)))))
-
-(font-lock-add-keywords 'js2-mode
-                        '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\|XXX\\):"
-                           1 font-lock-warning-face t)))
+      ;; Highlight these keywords
+      (font-lock-add-keywords
+       'js2-mode
+       '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\|XXX\\):"
+          1 font-lock-warning-face t)))))
 #+end_src
 
 * Text Editing
