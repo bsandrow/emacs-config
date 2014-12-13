@@ -319,13 +319,14 @@ configuration settings from [[https://github.com/sachac/.emacs.d/blob/gh-pages/S
 #+end_src
 
 ** Backups
-   
+
 Tell Emacs not to save backup files (those files that end in =~=) in
 the current directory. Instead, save them to =~/.emacs.d/backups=.
 
 #+begin_src emacs-lisp
 ;; Enable backups
-(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+(setq backup-dir (expand-file-name "backups" dotfiles-dir))
+(setq backup-directory-alist `(("." . ,backup-dir)))
 #+end_src
 
 Configure /how/ we save backups:
