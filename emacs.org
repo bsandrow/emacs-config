@@ -689,9 +689,12 @@ Install / Configure color themes. :)
 - https://github.com/sellout/emacs-color-theme-solarized/
 
 * Navigation
-** Ibuffer-Mode
+** ibuffer-mode
 
-Configuration:
+=ibuffer-mode= presents a list of all open buffers in Emacs with an
+interface to manage those buffers (remove them, group them, switch to
+them, etc). It's somewhat analogous to BufferExplorer in Vim, though I
+feel like =ibuffer-mode= has more functionality.
 
 #+begin_src emacs-lisp
   ;; Note: I'm not sure how packages-install and use-package will
@@ -701,6 +704,7 @@ Configuration:
   (packages-install '(ibuffer ibuffer-vc))
 
   (defun my-ibuffer-vc-hook ()
+    "Use ibuffer-vc to group by project root."
     (ibuffer-vc-set-filter-groups-by-vc-root)
     (unless (eq ibuffer-sorting-mode 'alphabetic)
       (ibuffer-do-sort-by-alphabetic)))
@@ -713,11 +717,9 @@ Configuration:
               (add-hook 'ibuffer-hook 'my-ibuffer-vc-hook)))
 #+end_src
 
-*TODO*:
-
-- Implement some non-Version Control based groups. There are examples [[http://emacs-fu.blogspot.ca/2010/02/dealing-with-many-buffers-ibuffer.html][here]], but
-  they conflict with =ibuffer-vc=. (They are both vying for control over
-  =ibuffer-saved-filter-groups=).
+*TODO*: Implement some non-Version Control based groups. There are
+examples [[http://emacs-fu.blogspot.ca/2010/02/dealing-with-many-buffers-ibuffer.html][here]], but they conflict with =ibuffer-vc=. (They are both
+vying for control over =ibuffer-saved-filter-groups=).
 
 #+begin_src emacs-lisp :tangle no
 (setq ibuffer-saved-filter-groups
@@ -728,14 +730,14 @@ Configuration:
 )
 #+end_src
 
-- Interface to switch between saved filter groups
-  - Special-case for ibuffer-vc generated groups
-  - Use ido completion
-  - Default to ibuffer-vc (since it's auto-generated, it will
-    probably apply in more cases).
-- Maybe a way to cycle through all of the saved filter groups (+
-  ibuffer-vc). I'm less bullish on this than I am on the ido
-  inferface.
+*TODO*: Look into an interface to switch between grouping methods from
+insider of =ibuffer-mode=. I would want there to be a special case for
+switching to =ibuffer-vc= generated groups. I would also want to use
+=ido-mode= completion for the named grouping methods. =ibuffer-vc=
+groups would probably be a good default.
+
+*TODO*: Related to 'switching' interface: Maybe a way to cycle through
+all of the saved filter groups.
 
 ** Ido mode
 
