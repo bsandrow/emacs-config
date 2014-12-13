@@ -837,7 +837,7 @@ See [[file:org.org][init-org.el]] for details on my [[http://orgmode.org][Org-Mo
 #+end_src
 ** Pomodoro
 
-*** Configuration
+An [[https://github.com/baudtack/pomodoro.el/blob/master/pomodoro.el][Emacs mode]] for using the [[http://pomodorotechnique.com/][Pomodoro technique]].
 
 #+begin_src emacs-lisp
 (setq pomodoro-work-time 25)
@@ -846,14 +846,16 @@ See [[file:org.org][init-org.el]] for details on my [[http://orgmode.org][Org-Mo
 (setq pomodoro-set-number 4)
 #+end_src
 
-*** Setup
+Defer loading of =pomodoro= until =pomodoro-start= is called.
 
 #+begin_src emacs-lisp
-(require 'pomodoro)
-(pomodoro-add-to-mode-line)
+  (use-package pomodoro
+    :commands pomodoro-start
+    :defer 1
+    :config (pomodoro-add-to-mode-line))
 #+end_src
 
-*** Sources
+*Sources*:
 - https://github.com/rodw/.dotfiles/blob/master/emacs/.rods-dot-emacs.org#pomodoro
 - http://ivan.kanis.fr/pomodoro.el
 - https://github.com/baudtack/pomodoro.el/blob/master/pomodoro.el
@@ -1251,7 +1253,7 @@ Config:
 #+end_src
 
 ** Ace Jump Mode
-   
+
 Load up =ace-jump-mode= for jumping around my buffer. I haven't used
 this much yet, but it seems like it could be useful if I ever get
 myself into using it more regularly.
