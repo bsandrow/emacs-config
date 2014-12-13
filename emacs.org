@@ -465,6 +465,19 @@ Note: If one of the dimensions is already maxed, it will be toggled
 (add-hook 'python-mode-hook (lambda () (hs-minor-mode 1)))
 (add-hook 'c-mode-hook (lambda () (hs-minor-mode 1)))
 #+end_src
+** Server
+
+If we aren't running Emacs in the console, then start up the server so
+that =emacs-client= works.
+
+#+begin_src emacs-lisp
+(require 'warnings)
+
+(when window-system
+  (let ((warning-minimum-level :error))
+    (server-start)))
+#+end_src
+
 * Global Formatting
 ** Tabs
 
