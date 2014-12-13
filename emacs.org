@@ -1266,28 +1266,28 @@ function comes from. I wasn't able to find it from the original
 source (someone's =.emacs.d= on [[https://github.com][Github]]).
 
 #+begin_src emacs-lisp :tangle no
-; Animated Welcome Message
-(defconst animate-n-steps 4)
-(defun emacs-reloaded () "animated welcome message" (interactive)
-  (animate-string
-    (concat ";; Initialization successful, welcome to "
-            (substring (emacs-version) 0 16)
-            "."
-            "\n"
-            ; ";; Tip of the Day:\n;;   "
-            ; "\n"
-            ; (cookie "~/.emacs.d/tip-of-the-day.fortune" "s" "e")
-            "\n"
-            ";; type C-x C-e for more tips\n"
-            "(emacs-reloaded)"
-            "\n")
-    0 0)
-  (end-of-buffer) (newline-and-indent)
-  ;; (newline-and-indent)  (newline-and-indent)
-)
-(add-hook 'after-init-hook (lambda ()
-                             (maximize-frame)
-                             (emacs-reloaded)))
+  ; Animated Welcome Message
+  (defconst animate-n-steps 4)
+  (defun emacs-reloaded () "animated welcome message" (interactive)
+    (animate-string
+      (concat ";; Initialization successful, welcome to "
+              (substring (emacs-version) 0 16)
+              "."
+              "\n"
+              ; ";; Tip of the Day:\n;;   "
+              ; "\n"
+              ; (cookie "~/.emacs.d/tip-of-the-day.fortune" "s" "e")
+              "\n"
+              ";; type C-x C-e for more tips\n"
+              "(emacs-reloaded)"
+              "\n")
+      0 0)
+    (end-of-buffer) (newline-and-indent)
+    ;; (newline-and-indent)  (newline-and-indent)
+  )
+  (add-hook 'after-init-hook (lambda ()
+                               (maximize-frame)
+                               (emacs-reloaded)))
 #+end_src
 
 * The *FUTURE*!
