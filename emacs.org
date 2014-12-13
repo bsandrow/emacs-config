@@ -1241,13 +1241,13 @@ Links:
 
 Config:
 #+begin_src emacs-lisp
-(when (require 'edit-server nil t)
-  ;; Launch the buffer in a new frame, I don't want it to pop up in
-  ;; the middle of a frame that I'm already doing something in.
-  (setq edit-server-new-frame t)
-
-  ;; Start the server...
-  (edit-server-start))
+  (use-package edit-server
+    :init (progn
+            ;; Launch the buffer in a new frame, I don't want it to pop
+            ;; up in the middle of a frame that I'm already doing
+            ;; something in.
+            (setq edit-server-new-frame t)
+            (edit-server-start)))
 #+end_src
 
 ** Ace Jump Mode
