@@ -1251,7 +1251,7 @@ Control over errors:
                   "jQuery" "$" "angular" "Ember"))
 
   ;; TODO What does this do:
-  (setq js2-mode-toggle-warnings-and-errors t))
+  (setq js2-mode-toggle-warnings-and-errors t)
 #+end_src
 
 * Text Editing
