@@ -85,155 +85,7 @@ hints like ',' to evaluate variables.
 
 Source: [[http://stackoverflow.com/questions/1664202/emacs-lisp-evaluate-variable-in-alist][Stack Overflow: Emacs Lisp Evaluate Variable in alist]]
 
-* Initialization
-** Customizations
-
-When you use the customization infrastructure to customize variables,
-store the changes in this file:
-
-#+begin_src emacs-lisp
-(setq custom-file (expand-file-name "custom.el" dotfiles-dir))
-#+end_src
-
-** Files and Directories
-
-Create =~/.emacs.d= subdirectories (if they don't exist):
-
-#+begin_src emacs-lisp
-(let* ((subdirs '("elisp" "backups" "snippets" "vendor"))
-       (fulldirs (mapcar (lambda (d) (expand-file-name d dotfiles-dir)) subdirs)))
-  (dolist (dir fulldirs)
-    (when (not (file-exists-p dir))
-      (message "Make directory: %s" dir)
-      (make-directory dir))))
-#+end_src
-
-The =~/.emacs.d/vendor= directory is where I put all of my 3rd-party
-elisp packages that I don't install from ELPA.
-
-#+begin_src emacs-lisp
-(setq vendor-dir (expand-file-name "vendor" dotfiles-dir))
-(add-to-list 'load-path vendor-dir)
-#+end_src
-
-** Packages
-
-Setup Emacs Lisp Package Archive (ELPA -- part of Emacs 24):
-
-#+begin_src emacs-lisp
-(setq package-user-dir (expand-file-name "elpa" dotfiles-dir))
-
-(require 'cl)
-(require 'package)
-
-(setq package-archives
-      '(("org" . "http://orgmode.org/elpa/")
-        ("gnu" . "http://elpa.gnu.org/packages/")
-        ("marmalade" . "http://marmalade-repo.org/packages/")
-        ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
-        ;("melpa" . "http://melpa.org/packages/")))
-
-(package-initialize)
-
-;; Refreshing the package lists is nice, but not so nice when doing
-;; lots of edits to your config...
-;(package-refresh-contents)
-
-(defun packages-install (packages)
-  "Given a list of packages, this will install them from the standard locations."
-  (let ((to-install (inverse-filter 'package-installed-p packages)))
-    (when to-install
-      (package-refresh-contents)
-      (dolist (it to-install)
-          (package-install it)
-      (delete-other-windows)))))
-#+end_src
-
-There is also this:
-
-#+begin_src emacs-lisp :tangle no
-(defun require-package (package)
-  (setq-default highlight-tabs t)
-  "Install given PACKAGE."
-  (unless (package-installed-p package)
-    (unless (assoc package package-archive-contents)
-      (package-refresh-contents))
-    (package-install package)))
-#+end_src
-
-Support function for =packages-install=. Grabbed from [[https://github.com/howardabrams/dot-files/blob/13fe16a2da8ee269de14b2baadd71580e21926f0/emacs-support.org][here]].
-
-#+begin_src emacs-lisp
-(defun inverse-filter (condp lst)
-  "A filter function, but returns a list of the entries that
-don't match the predicate."
-  (delq nil
-        (mapcar (lambda (x) (and (not (funcall condp x)) x)) lst)))
-#+end_src
-
-Packages:
-
-#+begin_src emacs-lisp
-(packages-install '(use-package))
-(require 'use-package)
-#+end_src
-
-#+begin_src emacs-lisp
-(packages-install '(vc-darcs
-                    ibuffer
-                    ibuffer-vc
-                    magit
-                    ido-vertical-mode
-                    projectile
-                    flx
-                    flx-ido
-                    git-commit-mode
-                    git-rebase-mode
-                    gitconfig-mode
-                    gitignore-mode
-                    gitattributes-mode))
-#+end_src
-
-** Exec Path
-
-The =exec-path= variable doesn't seem to get setup very well. I need
-to explicitly add =/usr/local/bin= to it:
-
-#+begin_src emacs-lisp
-(defun append-to-exec-path (path)
-  "Add PATH to EXEC-PATH"
-  (when (and (file-accessible-directory-p path)
-             (not (member 'path exec-path)))
-    (add-to-list 'exec-path path)))
-
-(append-to-exec-path "/usr/local/bin")
-#+end_src
-
-** The =after= Macro
-
-This useful macro allows normalization of elisp to deal with the
-absence or presence of =with-eval-after-load= (falling back to the
-older =eval-after-load=):
-
-#+begin_src emacs-lisp
-(if (fboundp 'with-eval-after-load)
-    (defmacro after (feature &rest body)
-      "After FEATURE is loaded, evaluate BODY."
-      (declare (indent defun))
-      `(with-eval-after-load ,feature ,@body))
-  (defmacro after (feature &rest body)
-    "After FEATURE is loaded, evaluate BODY."
-    (declare (indent defun))
-    `(eval-after-load ,feature
-       '(progn ,@body))))
-#+end_src
-
-Sources:
-- http://juanjoalvarez.net/es/detail/2014/sep/19/vim-emacsevil-chaotic-migration-guide/
-- https://github.com/juanjux/emacs-dotfiles/blob/master/init.el
-
-* Support Functions
-
+* Support Code
 ** Buffer Global replace-regexp
 
 By default =replace-regexp= only replaces from the current cursor
@@ -285,6 +137,175 @@ Pull up a buffer for displaying the ASCII table. ([[https://github.com/redguardt
            (setq i (+ i 1))
            (insert (format "%4d %c\n" i i))))
   (beginning-of-buffer))
+#+end_src
+
+** The =after= Macro
+
+This useful macro allows normalization of elisp to deal with the
+absence or presence of =with-eval-after-load= (falling back to the
+older =eval-after-load=):
+
+#+begin_src emacs-lisp
+(if (fboundp 'with-eval-after-load)
+    (defmacro after (feature &rest body)
+      "After FEATURE is loaded, evaluate BODY."
+      (declare (indent defun))
+      `(with-eval-after-load ,feature ,@body))
+  (defmacro after (feature &rest body)
+    "After FEATURE is loaded, evaluate BODY."
+    (declare (indent defun))
+    `(eval-after-load ,feature
+       '(progn ,@body))))
+#+end_src
+
+Example Usage:
+
+#+begin_src emacs-lisp :tangle no
+(after 'projectile
+  (require-package 'helm-projectile))
+#+end_src
+
+Sources:
+- http://juanjoalvarez.net/es/detail/2014/sep/19/vim-emacsevil-chaotic-migration-guide/
+- https://github.com/juanjux/emacs-dotfiles/blob/master/init.el
+
+** Append to =exec-path=
+
+#+begin_src emacs-lisp
+(defun append-to-exec-path (path)
+  "Add PATH to EXEC-PATH"
+  (when (and (file-accessible-directory-p path)
+             (not (member 'path exec-path)))
+    (add-to-list 'exec-path path)))
+#+end_src
+
+** inverse-filter
+
+Reverse of filter. Return all items that don't match =condp=.
+
+ [[https://github.com/howardabrams/dot-files/blob/13fe16a2da8ee269de14b2baadd71580e21926f0/emacs-support.org][source]]
+
+#+begin_src emacs-lisp
+(require 'cl)
+(defun inverse-filter (condp lst)
+  "A filter function, but returns a list of the entries that
+don't match the predicate."
+  (delq nil
+        (mapcar (lambda (x) (and (not (funcall condp x)) x)) lst)))
+#+end_src
+
+** Package Installation
+
+I'm currently using this:
+
+#+begin_src emacs-lisp
+(defun packages-install (packages)
+  "Given a list of packages, this will install them from the standard locations."
+  (let ((to-install (inverse-filter 'package-installed-p packages)))
+    (when to-install
+      (package-refresh-contents)
+      (dolist (it to-install)
+          (package-install it)
+      (delete-other-windows)))))
+#+end_src
+
+There is also this:
+
+#+begin_src emacs-lisp :tangle no
+(defun require-package (package)
+  (setq-default highlight-tabs t)
+  "Install given PACKAGE."
+  (unless (package-installed-p package)
+    (unless (assoc package package-archive-contents)
+      (package-refresh-contents))
+    (package-install package)))
+#+end_src
+
+* Initialization
+** Customizations
+
+When you use the customization infrastructure to customize variables,
+store the changes in this file:
+
+#+begin_src emacs-lisp
+(setq custom-file (expand-file-name "custom.el" dotfiles-dir))
+#+end_src
+
+** Files and Directories
+
+Create =~/.emacs.d= subdirectories (if they don't exist):
+
+#+begin_src emacs-lisp
+(let* ((subdirs '("elisp" "backups" "snippets" "vendor"))
+       (fulldirs (mapcar (lambda (d) (expand-file-name d dotfiles-dir)) subdirs)))
+  (dolist (dir fulldirs)
+    (when (not (file-exists-p dir))
+      (message "Make directory: %s" dir)
+      (make-directory dir))))
+#+end_src
+
+The =~/.emacs.d/vendor= directory is where I put all of my 3rd-party
+elisp packages that I don't install from ELPA.
+
+#+begin_src emacs-lisp
+(setq vendor-dir (expand-file-name "vendor" dotfiles-dir))
+(add-to-list 'load-path vendor-dir)
+#+end_src
+
+** Exec Path
+
+The =exec-path= variable doesn't seem to get setup very well. I need
+to explicitly add =/usr/local/bin= to it:
+
+#+begin_src emacs-lisp
+(append-to-exec-path "/usr/local/bin")
+#+end_src
+
+** Packages
+   
+Setup Emacs Lisp Package Archive (ELPA -- part of Emacs 24):
+
+#+begin_src emacs-lisp
+(setq package-user-dir (expand-file-name "elpa" dotfiles-dir))
+
+(require 'cl)
+(require 'package)
+
+(setq package-archives
+      '(("org" . "http://orgmode.org/elpa/")
+        ("gnu" . "http://elpa.gnu.org/packages/")
+        ("marmalade" . "http://marmalade-repo.org/packages/")
+        ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
+        ;("melpa" . "http://melpa.org/packages/")))
+
+(package-initialize)
+
+;; Refreshing the package lists is nice, but not so nice when doing
+;; lots of edits to your config...
+;(package-refresh-contents)
+#+end_src
+
+Packages:
+
+#+begin_src emacs-lisp
+(packages-install '(use-package))
+(require 'use-package)
+#+end_src
+
+#+begin_src emacs-lisp
+(packages-install '(vc-darcs
+                    ibuffer
+                    ibuffer-vc
+                    magit
+                    ido-vertical-mode
+                    projectile
+                    flx
+                    flx-ido
+                    git-commit-mode
+                    git-rebase-mode
+                    gitconfig-mode
+                    gitignore-mode
+                    gitattributes-mode))
 #+end_src
 
 * General Configuration
