@@ -209,16 +209,6 @@ to explicitly add =/usr/local/bin= to it:
 (append-to-exec-path "/usr/local/bin")
 #+end_src
 
-*TODO* This isn't really working right now. I'm not sure what's wrong
-with it.
-
-*TODO* Look into that extension for splitting this off from the
-shell's $PATH.
-
-*NOTE* =describe-variable= tells me that the value changed from a list
-of paths that seems to make more sense, to a severly restricted set of
-paths. Why? I have no clue what's causing that. Let's find out!
-
 ** The =after= Macro
 
 This useful macro allows normalization of elisp to deal with the
