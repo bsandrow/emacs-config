@@ -722,12 +722,8 @@ examples [[http://emacs-fu.blogspot.ca/2010/02/dealing-with-many-buffers-ibuffer
 vying for control over =ibuffer-saved-filter-groups=).
 
 #+begin_src emacs-lisp :tangle no
-(setq ibuffer-saved-filter-groups
-      (quote (("default"
-               ("Org" (mode . org-mode))
-             ))
-      )
-)
+  (setq ibuffer-saved-filter-groups '(("default"
+                                       ("Org" (mode . org-mode)))))
 #+end_src
 
 *TODO*: Look into an interface to switch between grouping methods from
@@ -738,6 +734,45 @@ groups would probably be a good default.
 
 *TODO*: Related to 'switching' interface: Maybe a way to cycle through
 all of the saved filter groups.
+
+*notes*:
+
+- Implementing group-switching interface doesn't look too difficult. The choices would
+  have to be taken from the 'keys' of the =ibuffer-saved-filter-groups= variable, and
+  adding in a manual entry for =ibuffer-vc=. =ibuffer-vc= looks like
+  it works by calling =ibuffer-vc-generate-filter-groups-by-vc-root=
+  to generate a filter group dynamically. So... we would call
+  =ibuffer-switch-to-saved-filter-groups= to swtich to one of the
+  saved groups or do something like =(setq ibuffer-filter-groups
+  (ibuffer-vc-generate-filter-groups-by-vc-root))= if the user chooses
+  =ibuffer-vc= (or just call =ibuffer-vc-set-filter-groups-by-vc-root=
+  directly).
+
+Some scratch work:
+
+#+begin_src emacs-lisp :tangle no
+(setq ibuffer-saved-filter-groups '(("default"
+                                     ("Org" (mode . org-mode)))))
+
+(delq nil (mapcar (lambda (x) (and (eq (car x) "default") x)) ibuffer-saved-filter-groups))
+
+
+(defun tester (filter-group)
+  (interactive (list (ido-completing-read
+                      "Filter Group: "
+                      (append '("ibuffer-vc")
+                              (mapcar 'car ibuffer-saved-filter-groups)))))
+  (let ((filter-groups (cond
+                        ((eq filter-group "ibuffer-vc") (ibuffer-vc-generate-filter-groups-by-vc-root))
+                        (t (cdr (filter
+                                 (lambda (x) (eq (car x) filter-group))
+                                 'ibuffer-saved-filter-groups))))))
+    (message "%s" filter-groups)))
+  ;; (cond ((eq filter-group "ibuffer-vc") (ibuffer-vc-set-filter-groups-by-vc-root))
+  ;;       (t (ibuffer-switch-to-saved-filter-groups filter-group))))
+
+(tester "blah")
+#+end_src
 
 ** Ido mode
 
