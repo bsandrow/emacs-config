@@ -169,16 +169,6 @@ Sources:
 - http://juanjoalvarez.net/es/detail/2014/sep/19/vim-emacsevil-chaotic-migration-guide/
 - https://github.com/juanjux/emacs-dotfiles/blob/master/init.el
 
-** Append to =exec-path=
-
-#+begin_src emacs-lisp
-(defun append-to-exec-path (path)
-  "Add PATH to EXEC-PATH"
-  (when (and (file-accessible-directory-p path)
-             (not (member 'path exec-path)))
-    (add-to-list 'exec-path path)))
-#+end_src
-
 ** inverse-filter
 
 Reverse of filter. Return all items that don't match =condp=.
@@ -186,39 +176,11 @@ Reverse of filter. Return all items that don't match =condp=.
  [[https://github.com/howardabrams/dot-files/blob/13fe16a2da8ee269de14b2baadd71580e21926f0/emacs-support.org][source]]
 
 #+begin_src emacs-lisp
-(require 'cl)
 (defun inverse-filter (condp lst)
   "A filter function, but returns a list of the entries that
 don't match the predicate."
   (delq nil
         (mapcar (lambda (x) (and (not (funcall condp x)) x)) lst)))
-#+end_src
-
-** Package Installation
-
-I'm currently using this:
-
-#+begin_src emacs-lisp
-(defun packages-install (packages)
-  "Given a list of packages, this will install them from the standard locations."
-  (let ((to-install (inverse-filter 'package-installed-p packages)))
-    (when to-install
-      (package-refresh-contents)
-      (dolist (it to-install)
-          (package-install it)
-      (delete-other-windows)))))
-#+end_src
-
-There is also this:
-
-#+begin_src emacs-lisp :tangle no
-(defun require-package (package)
-  (setq-default highlight-tabs t)
-  "Install given PACKAGE."
-  (unless (package-installed-p package)
-    (unless (assoc package package-archive-contents)
-      (package-refresh-contents))
-    (package-install package)))
 #+end_src
 
 * Initialization
@@ -258,6 +220,12 @@ The =exec-path= variable doesn't seem to get setup very well. I need
 to explicitly add =/usr/local/bin= to it:
 
 #+begin_src emacs-lisp
+(defun append-to-exec-path (path)
+  "Add PATH to EXEC-PATH"
+  (when (and (file-accessible-directory-p path)
+             (not (member 'path exec-path)))
+    (add-to-list 'exec-path path)))
+
 (append-to-exec-path "/usr/local/bin")
 #+end_src
 
@@ -283,6 +251,31 @@ Setup Emacs Lisp Package Archive (ELPA -- part of Emacs 24):
 ;; Refreshing the package lists is nice, but not so nice when doing
 ;; lots of edits to your config...
 ;(package-refresh-contents)
+#+end_src
+
+*Package Installation Code*
+
+#+begin_src emacs-lisp
+(defun packages-install (packages)
+  "Given a list of packages, this will install them from the standard locations."
+  (let ((to-install (inverse-filter 'package-installed-p packages)))
+    (when to-install
+      (package-refresh-contents)
+      (dolist (it to-install)
+          (package-install it)
+      (delete-other-windows)))))
+#+end_src
+
+Deprecated Version:
+
+#+begin_src emacs-lisp :tangle no
+(defun require-package (package)
+  (setq-default highlight-tabs t)
+  "Install given PACKAGE."
+  (unless (package-installed-p package)
+    (unless (assoc package package-archive-contents)
+      (package-refresh-contents))
+    (package-install package)))
 #+end_src
 
 Packages:
@@ -316,16 +309,15 @@ Use =savehist-mode= to store the minibuffer history. I picked up
 configuration settings from [[https://github.com/sachac/.emacs.d/blob/gh-pages/Sacha.org#history][here]].
 
 #+begin_src emacs-lisp
-(packages-install '(savehist))
-(require 'savehist)
-
-(setq savehist-file (expand-file-name "savehist" dotfiles-dir))
-(savehist-mode 1)
-(setq history-length t)
-(setq history-delete-duplicates t)
-(setq savehist-save-minibuffer-history t)
-(setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
-(setq savehist-autosave-interval 60)
+  (packages-install '(savehist))
+  (use-package savehist
+    :config (savehist-mode 1))
+  (setq savehist-file (expand-file-name "savehist" dotfiles-dir))
+  (setq history-length t)
+  (setq history-delete-duplicates t)
+  (setq savehist-save-minibuffer-history t)
+  (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+  (setq savehist-autosave-interval 60)
 #+end_src
 
 ** Backups
@@ -357,13 +349,13 @@ Configure /how/ we save backups:
 ;; (setq auto-save-default nil)
 #+end_src
 
-** =saveplace=
+** saveplace
 
 Remember the last edit position:
 
 #+begin_src emacs-lisp
 (packages-install '(saveplace))
-(require 'saveplace)
+(use-package saveplace)
 (setq save-place-file (expand-file-name "saveplace" dotfiles-dir))
 (setq-default save-place t)
 #+end_src
@@ -395,13 +387,13 @@ string) to the function =y-or-n-p= (which only prompts for =y= or
 Configure =ack-and-a-half=.
 
 #+begin_src emacs-lisp
-(require 'ack-and-a-half)
-
-(defalias 'ack 'ack-and-a-half)
-(defalias 'ack-same 'ack-and-a-half-same)
-(defalias 'ack-find-file 'ack-and-a-half-find-file)
-(defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
-(defalias 'ack-with-args 'ack-and-a-half-with-args)
+  (use-package ack-and-a-half
+    :config (progn
+              (defalias 'ack 'ack-and-a-half)
+              (defalias 'ack-same 'ack-and-a-half-same)
+              (defalias 'ack-find-file 'ack-and-a-half-find-file)
+              (defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
+              (defalias 'ack-with-args 'ack-and-a-half-with-args)))
 #+end_src
 
 ** Scrolling
@@ -415,6 +407,9 @@ Sources:
 (setq mouse-wheel-follow-mouse 't) ; scroll the window under the mouse
 (setq scroll-step 1) ; keyboard scroll one line at a time
 #+end_src
+
+*TODO* Tweak the scroll accelerate setting. I think that I want to
+ accelerate scrolling, but before it was /way/ too sensitive.
 ** Frames
 
 This allows one to toggle usage of OSX's native full screen
@@ -438,21 +433,22 @@ Give me the power to maximize the frame dimensions without using
 [[https://github.com/izawa/maximize/blob/master/maximize.el][maximize.el]] for this.
 
 #+begin_src emacs-lisp
-(require 'maximize)
+  (use-package maximize)
 
-(defun maximize-toggle-frame-max ()
-  "Maximize the window (horizontally and vertically).
+  (defun maximize-toggle-frame-max ()
+    "Maximize the window (horizontally and vertically).
 
-Note: If one of the dimensions is already maxed, it will be toggled
-      off instead of on. Would have to take a deeper look at the
-      internals of the functions to check for that or not."
-  (interactive)
-  (maximize-toggle-frame-vmax)
-  (maximize-toggle-frame-hmax))
+  Note: If one of the dimensions is already maxed, it will be toggled
+        off instead of on. Would have to take a deeper look at the
+        internals of the functions to check for that or not."
+    (interactive)
+    (maximize-toggle-frame-vmax)
+    (maximize-toggle-frame-hmax))
 #+end_src
 
 ** Folding
 #+begin_src emacs-lisp
+;; TODO: Convert to use 'after' macro
 (eval-after-load 'hideshow
   '(progn
      (defun evil-za ()
@@ -514,58 +510,58 @@ Configure tabs / indentation:
 
 ** Encoding
 
-   #+begin_src emacs-lisp
-   (set-language-environment "UTF-8")
-   (set-terminal-coding-system 'utf-8)
-   (set-keyboard-coding-system 'utf-8)
-   (prefer-coding-system 'utf-8)
-   #+end_src
+#+begin_src emacs-lisp
+  (set-language-environment "UTF-8")
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+#+end_src
 
 * Display Settings
 
-  A number of the default settings should just be disabled as they
-  tend to get in the way.
+A number of the default settings should just be disabled as they
+tend to get in the way.
 
-  #+begin_src emacs-lisp
+#+begin_src emacs-lisp
   (setq inhibit-startup-message t)
   (setq initial-scratch-message nil)
   (setq visible-bell t)
-
+  
   ;; Disable the menu if we're on the console.
   (unless (window-system)
     (when (fboundp 'menu-bar-mode)
       (menu-bar-mode -1)))
-
+  
   ;; When we're in GUI mode, disable toolbars and scrollbars.
   (when (window-system)
     (when (fboundp 'tool-bar-mode)
       (tool-bar-mode -1))
-
+  
     (when (fboundp 'horizontal-scroll-bar-mode)
       (horizontal-scroll-bar-mode -1))
-
+  
     (when (fboundp 'scroll-bar-mode)
       (scroll-bar-mode -1)))
-
+  
   ;; Make sure that everyone reading the window title knows: THIS! IS! EMACS!
   (setq frame-title-format "%b - Emacs")
   (setq icon-title-format "%b - Emacs")
-
+  
   ;; Don't pull up a GUI-native file selector. Use the minibuffer. Ths
   ;; only way that FSM intended.
   (setq use-file-dialog nil)
-
+  
   ;; Default to 'truncating' display of long lines rather than
   ;; wrapping them.
   ;(setq-default truncate-lines t)
-  #+end_src
+#+end_src
 
-  Let's also make the initial window ("frame") a little bigger:
+Let's also make the initial window ("frame") a little bigger:
 
-  #+begin_src emacs-lisp
+#+begin_src emacs-lisp
   (add-to-list 'default-frame-alist '(height . 55))
   (add-to-list 'default-frame-alist '(width . 174))
-  #+end_src
+#+end_src
 
 ** Fonts
 
@@ -610,10 +606,10 @@ Old Code:
 
 =fic-mode= highlights =FIXME=, =TODO=, etc.
 
-#+begin_src emacs-lisp
-;; (require 'fic-mode)
-;; (add-hook 'c++-mode-hook 'turn-on-fic-mode)
-;; (add-hook 'emacs-lisp-mode-hook 'turn-on-fic-mode)
+#+begin_src emacs-lisp :tangle no
+  (require 'fic-mode)
+  (add-hook 'c++-mode-hook 'turn-on-fic-mode)
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-fic-mode)
 #+end_src
 
 *TODO* Need to work on the appearance of highlighting red-on-yellow
