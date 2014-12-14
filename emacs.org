@@ -1214,30 +1214,10 @@ a bit with some explanation.)
 
 #+begin_src emacs-lisp
   (use-package js2-mode
+    :defer 1
     :mode ("\\.js\\'" . js2-mode)
-    :pre-load
-    (progn
-      (setq js-basic-indent 2)
-      (setq-default js2-basic-indent 2)
-      (setq-default js2-basic-offset 2)
-      (setq-default js2-auto-indent-p t)
-      (setq-default js2-cleanup-whitespace t)
-      (setq-default js2-enter-indents-newline t)
-      (setq-default js2-indent-on-enter-key t)
-      ;(setq-default js2-mode-indent-ignore-first-tab t)
-
-      ;; Let flymake do the error-parsing
-      ;;(setq-default js2-show-parse-errors nil)
-
-      (setq-default js2-global-externs
-                    '("assert" "refute" "setTimeout"
-                      "clearTimeout" "setInterval"
-                      "clearInterval" "console" "JSON"
-                      "jQuery" "$" "angular" "Ember"))
-
-      ;; TODO What does this do:
-      (setq js2-mode-toggle-warnings-and-errors t))
-
+    :pre-load (progn
+                (setq-default js2-auto-indent-p t))
     :config
     (progn
       ;; Replace 'function' with 'ƒ'
@@ -1251,6 +1231,40 @@ a bit with some explanation.)
        'js2-mode
        '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\|XXX\\):"
           1 font-lock-warning-face t)))))
+#+end_src
+
+Configure indentation controls:
+
+#+begin_src emacs-lisp
+  (setq js-basic-indent 2)
+  (setq-default js2-basic-indent 2)
+  (setq-default js2-basic-offset 2)
+  (setq-default js2-enter-indents-newline t)
+  (setq-default js2-indent-on-enter-key t)
+  ;(setq-default js2-mode-indent-ignore-first-tab t)
+#+end_src
+
+Clean up whitespace sometimes:
+
+#+begin_src emacs-lisp
+  (setq-default js2-cleanup-whitespace t)
+#+end_src
+
+Control over errors:
+
+#+begin_src emacs-lisp
+
+  ;; Let flymake do the error-parsing
+  ;;(setq-default js2-show-parse-errors nil)
+
+  (setq-default js2-global-externs
+                '("assert" "refute" "setTimeout"
+                  "clearTimeout" "setInterval"
+                  "clearInterval" "console" "JSON"
+                  "jQuery" "$" "angular" "Ember"))
+
+  ;; TODO What does this do:
+  (setq js2-mode-toggle-warnings-and-errors t))
 #+end_src
 
 * Text Editing
