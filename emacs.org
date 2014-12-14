@@ -51,6 +51,10 @@ than =emacs-lisp=.
 
 * Emacs Lisp Notes
 
+** RESOURCES:
+
+- http://stackoverflow.com/questions/2234860/lisp-filter-out-results-from-list-not-matching-predicate
+
 ** Using variables in alists
 
 Use need to use backtick rather than quote. This allows you to use a
@@ -82,18 +86,21 @@ hints like ',' to evaluate variables.
 Source: [[http://stackoverflow.com/questions/1664202/emacs-lisp-evaluate-variable-in-alist][Stack Overflow: Emacs Lisp Evaluate Variable in alist]]
 
 * Initialization
-** Files and Directories
+** Customizations
 
-Custom file:
+When you use the customization infrastructure to customize variables,
+store the changes in this file:
 
 #+begin_src emacs-lisp
 (setq custom-file (expand-file-name "custom.el" dotfiles-dir))
 #+end_src
 
-Subdirectories:
+** Files and Directories
+
+Create =~/.emacs.d= subdirectories (if they don't exist):
 
 #+begin_src emacs-lisp
-(let* ((subdirs '("elisp" "backups" "snippets"))
+(let* ((subdirs '("elisp" "backups" "snippets" "vendor"))
        (fulldirs (mapcar (lambda (d) (expand-file-name d dotfiles-dir)) subdirs)))
   (dolist (dir fulldirs)
     (when (not (file-exists-p dir))
@@ -101,27 +108,12 @@ Subdirectories:
       (make-directory dir))))
 #+end_src
 
-=load-path= and Misc:
+The =~/.emacs.d/vendor= directory is where I put all of my 3rd-party
+elisp packages that I don't install from ELPA.
 
 #+begin_src emacs-lisp
-(setq autoload-file (expand-file-name "loaddefs.el" dotfiles-dir))
-(setq package-user-dir (expand-file-name "elpa" dotfiles-dir))
-
 (setq vendor-dir (expand-file-name "vendor" dotfiles-dir))
 (add-to-list 'load-path vendor-dir)
-
-; (setq personal-dir (expand-file-name "personal" dotfiles-dir))
-; (add-to-list 'load-path personal-dir)
-#+end_src
-
-TODO:
-
-#+begin_src emacs-lisp
-;; TODO Figure out what's wrong with this. It's setup these way in the
-;; github setup that I was based this off of, but my Emacs complains
-;; that ~/.emacs.d is in the load path, and that this could cause
-;; issues.
-;(add-to-list 'load-path dotfiles-dir)
 #+end_src
 
 ** Packages
@@ -129,6 +121,8 @@ TODO:
 Setup Emacs Lisp Package Archive (ELPA -- part of Emacs 24):
 
 #+begin_src emacs-lisp
+(setq package-user-dir (expand-file-name "elpa" dotfiles-dir))
+
 (require 'cl)
 (require 'package)
 
@@ -1212,6 +1206,9 @@ Configure Emacs for editting Python.
 Use =js2-mode= for JavaScript. (Note: I should probably break this up
 a bit with some explanation.)
 
+Note:
+- I grabbed the bit on =js2-auto-indent-p= from [[https://github.com/mooz/js2-mode/issues/9][here]].
+
 #+begin_src emacs-lisp
   (use-package js2-mode
     :defer 1
@@ -1352,7 +1349,38 @@ source (someone's =.emacs.d= on [[https://github.com][Github]]).
 #+end_src
 
 * The *FUTURE*!
-** Look into the =use-package= package.
+** TODO Look into the =use-package= package.
+** TODO Look into [[https://github.com/flycheck/flycheck][flycheck]] ([[http://www.emacswiki.org/emacs/Flycheck][emacswiki]]).
+Also: [[http://www.flycheck.org/en/latest/guide/languages.html#javascript][How to configure a particular JavaScript backend?]]
+
+** TODO Keep on Pimpin' That Config
+
+Resources:
+- [ ] [[https://github.com/rpdillon/emacs-config/blob/master/.gitmodules][rpdillon's emacs config]]
+- [ ] [[https://github.com/magnars/.emacs.d/blob/master/setup-js2-mode.el][magnars emacs config]]
+- [ ] [[https://github.com/howardabrams/dot-files/tree/13fe16a2da8ee269de14b2baadd71580e21926f0][howard abrams emacs config]]
+- [ ] [[https://github.com/zk-phi/phi-grep][phi-grep]]
+- [ ] [[http://masteringemacs.org/my-emacs-packages][Mastering Emacs Packages]]
+
+** Literate Programming + Emacs Config
+
+- [[http://sachachua.com/blog/2012/06/literate-programming-emacs-configuration-file/][Sacha Chua: Literate programming and my Emacs configuration file]]
+- [[https://github.com/jonnay/emagicians-starter-kit/blob/master/Emagician-Install.org][Emagician Starter Kit]] -- A NiH version of the Emacs Starter Kit.
+- [[https://github.com/sachac/.emacs.d/blob/gh-pages/Sacha.org#history][Sacha Chua's Emacs Config]]
+
+** TODO Learn Emacs Lisp
+
+Resources:
+- [[https://www.gnu.org/software/emacs/manual/html_mono/eintr.html][An Introduction to Programming in Emacs Lisp]]
+- [[http://stackoverflow.com/questions/1664202/emacs-lisp-evaluate-variable-in-alist][Stack Overflow: How to Eval a Variable in an alist]]
+- [[http://stackoverflow.com/questions/15485833/emacs-lisp-evaluate-variable-in-alist][Stack Overflow: Emacs lisp evaluate variable in alist]]
+
+** Reading List
+
+- [ ] [[http://www.howardism.org/Technical/Emacs/literate-devops.html][Literate DevOps]]
+- [ ] [[http://uncommonlisp.blogspot.ca/2013/01/emacs-vs-vim-part-2.html][Uncommon Lisp]]
+- [ ] [[https://news.ycombinator.com/item?id=8709996][Emacs Isn't For Everyone]]
+
 * Misc. Sources
 
 Some sources of config/inspiration that I've tapped in the past:
