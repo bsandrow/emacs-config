@@ -4,7 +4,7 @@
 #+TAGS: emacs
 
 #+begin_src emacs-lisp
-(packages-install '(org))
+(packages-install '(org htmlize))
 #+end_src
 
 * Org-Mode Babel
