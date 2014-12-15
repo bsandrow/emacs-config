@@ -568,6 +568,16 @@ not sure if this would affect both of them, or just one of them.
   (prefer-coding-system 'utf-8)
 #+end_src
 
+** Color Identifiers Mode
+
+[[https://github.com/ankurdave/color-identifiers-mode][=color-identifiers-mode=]] brings some color to identifier names.
+
+#+begin_src emacs-lisp
+  (use-package color-identifiers-mode
+    :commands color-identifiers-mode
+    :defer 1)
+#+end_src
+
 * Display Settings
 
 A number of the default settings should just be disabled as they
@@ -1259,7 +1269,14 @@ Configure Emacs for editting Python.
 
   (use-package python-mode
     :mode ("\\.py\\'" . python-mode)
-    :interpreter ("python" . python-mode))
+    :interpreter ("python" . python-mode)
+    :config
+    (progn
+      (add-hook 'python-mode-hook
+                (lambda ()
+                  (setq python-indent tab-width)
+                  (setq py-indent-offset tab-width)
+                  (color-identifiers-mode)))))
 #+end_src
 
 ** JavaScript
