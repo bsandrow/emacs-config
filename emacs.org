@@ -1268,7 +1268,8 @@ Configure Emacs for editting Python.
   ;; (add-to-list 'load-path (expand-file-name "python-mode.el-6.2.0" vendor-dir))
 
   (use-package python-mode
-    :mode ("\\.py\\'" . python-mode)
+    :mode (("\\.py\\'" . python-mode)
+           ("\\.wsgi$" . python-mode))
     :interpreter ("python" . python-mode)
     :config
     (progn
