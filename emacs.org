@@ -855,8 +855,9 @@ Some scratch work:
 ** Ido mode
 
 #+begin_src emacs-lisp
-(require 'ido)
-(ido-mode t)
+  (use-package ido
+    :ensure ido
+    :config (ido-mode t))
 #+end_src
 
 I prefer my matches to be shown vertically (like Vim's [[https://github.com/kien/ctrlp.vim][CtrlP]] or
@@ -867,10 +868,10 @@ the match is always the one at the top. I may modify this mode, or
 write my own to eventually get what I want.
 
 #+begin_src emacs-lisp
-;; Display ido-mode matches vertically
-(packages-install '(ido-vertical-mode))
-(require 'ido-vertical-mode)
-(ido-vertical-mode t)
+  ;; Display ido-mode matches vertically
+  (use-package ido-vertical-mode
+    :ensure ido-vertical-mode
+    :config (ido-vertical-mode t))
 #+end_src
 
 Enable flex matching (via =flx='s =flx-ido=). This is also like CtrlP
@@ -879,19 +880,20 @@ like the fuzzy matching is still coming along (currently it only works
 in limited instances).
 
 #+begin_src emacs-lisp
-(packages-install '(flx-ido))
-(require 'flx-ido)
-(flx-ido-mode 1)
-(setq ido-enable-flex-matching t)
-(setq ido-user-faces nil)
+  (use-package flx-ido
+    :ensure flx-ido
+    :init (progn
+            (setq ido-enable-flex-matching t)
+            (setq ido-user-faces nil))
+    :config (flx-ido-mode 1))
 #+end_src
 
 Use [[https://github.com/bbatsov/projectile][Projectile]] for in-project searching.
 
 #+begin_src emacs-lisp
-(packages-install '(projectile))
-(require 'projectile)
-(projectile-global-mode)
+  (use-package projectile
+    :ensure projectile
+    :config (projectile-global-mode))
 #+end_src
 
 Let's tie that all together then. If we're in a project, then use
@@ -899,12 +901,12 @@ Let's tie that all together then. If we're in a project, then use
 very basic for the time-being, but I'll improve it over time.
 
 #+begin_src emacs-lisp
-(defun my-find-file ()
-  "Open file using projectile or ido"
-  (interactive)
-  (if (projectile-project-p)
-      (projectile-find-file)
-    (ido-find-file)))
+  (defun my-find-file ()
+    "Open file using projectile or ido"
+    (interactive)
+    (if (projectile-project-p)
+        (projectile-find-file)
+      (ido-find-file)))
 #+end_src
 
 ** Ido mode Keymaps
@@ -944,6 +946,19 @@ at least for file completion as this is my major use of =ido-mode=.
 ;;
 (define-key ido-file-completion-map "\C-w" 'ido-delete-backward-word-updir)
 #+end_src
+
+** Ace Jump Mode
+
+Load up =ace-jump-mode= for jumping around my buffer. I haven't used
+this much yet, but it seems like it could be useful if I ever get
+myself into using it more regularly.
+
+#+begin_src emacs-lisp
+  (use-package ace-jump-mode
+    :commands ace-jump-mode)
+#+end_src
+
+The rest of the configuration is in =evil-mode= config right now...
 
 * Organization
 ** Org-Mode
@@ -1394,19 +1409,6 @@ Config:
             (setq edit-server-new-frame t)
             (edit-server-start)))
 #+end_src
-
-** Ace Jump Mode
-
-Load up =ace-jump-mode= for jumping around my buffer. I haven't used
-this much yet, but it seems like it could be useful if I ever get
-myself into using it more regularly.
-
-#+begin_src emacs-lisp
-  (use-package ace-jump-mode
-    :commands ace-jump-mode)
-#+end_src
-
-The rest of the configuration is in =evil-mode= config right now...
 
 ** Animated Welcome Message
 
