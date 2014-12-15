@@ -475,22 +475,80 @@ that =emacs-client= works.
     (server-start)))
 #+end_src
 
+** Undo Tree
+
+=undo-tree= mode exposes Emacs' tree-like undo history via a visual
+(easy) interface. Yay! =\o/=
+
+#+begin_src emacs-lisp
+  (use-package undo-tree
+    :config
+    (progn
+      (diminish 'undo-tree-mode " ↺") ; shorten modeline display
+    ))
+#+end_src
+
+** Diminish
+
+#+begin_src emacs-lisp
+  (use-package diminish
+    :commands diminish
+    :defer 1)
+#+end_src
+
 * Global Formatting
 ** Tabs
 
-Configure tabs / indentation:
+Configure handling of =<Tab>= and indentation.
 
-*TODO* More explanation here.
+This controls the use of literal =<Tab>= (=\t=) for indentation. When
+set to false, it will insert =tab-width= spaces in place of =\t=.
 
 #+begin_src emacs-lisp
 (setq-default indent-tabs-mode nil)
-(setq-default tab-width 4) ; or any other preferred value
-(setq indent-line-function 'insert-tab)
+#+end_src
 
+Controls how many spaces are considered a =\t=. This controls how
+literal =\t='s are display (I /think/) and how many spaces to insert
+when =indent-tabs-mode= is false.
+
+#+begin_src emacs-lisp
+(setq-default tab-width 4)
+#+end_src
+
+Many modes bind the =<Tab>= key to this function. Let's just run
+=insert-tab= instead.
+
+#+begin_src emacs-lisp
+(setq indent-line-function 'insert-tab)
+#+end_src
+
+It's recommended to set the =c-basic-offset= and =cperl-indent-level=
+values to =tab-width=. I'm not 100% sure how these values affect Emacs
+outside of their respective modes, but the EmacsWiki recommends this.
+
+(I guess it's possible that other modes may have built off of these
+values, to the point where they aren't mode-specific anymore, despite
+their naming.)
+
+#+begin_src emacs-lisp
 (defvaralias 'c-basic-offset 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
+#+end_src
+
+I'm not entirely sure on this guy. I probably grabbed it from
+someone's config. There are a couple of different Python modes, so I'm
+not sure if this would affect both of them, or just one of them.
+
+*TODO* Figure this out.
+
+*TODO* Group this with other Python-specific config.
+
+#+begin_src emacs-lisp
 (setq-default py-indent-offset 4)
 #+end_src
+
+*TODO* Add code to set tabstops here
 
 ** Trailing Newline
 
@@ -673,7 +731,8 @@ Install / Configure color themes. :)
 
 ;(load-theme 'base16-ocean-dark t)
 ;(load-theme 'base16-flat-dark t)
-(load-theme 'spacegray t)
+;(load-theme 'spacegray t)
+(load-theme 'solarized-dark t)
 #+end_src
 
 *Resources:*
