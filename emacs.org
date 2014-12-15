@@ -538,6 +538,19 @@ their naming.)
 (defvaralias 'cperl-indent-level 'tab-width)
 #+end_src
 
+[[http://stackoverflow.com/questions/69934/set-4-space-indent-in-emacs-in-text-mode][Tabstops]]
+
+#+begin_src emacs-lisp
+(defun my-generate-tab-stops (&optional width max)
+  "Return a sequence suitable for `tab-stop-list'."
+  (let* ((max-column (or max 200))
+         (tab-width (or width tab-width))
+         (count (/ max-column tab-width)))
+    (number-sequence tab-width (* tab-width count) tab-width)))
+
+(setq tab-stop-list (my-generate-tab-stops))
+#+end_src
+
 I'm not entirely sure on this guy. I probably grabbed it from
 someone's config. There are a couple of different Python modes, so I'm
 not sure if this would affect both of them, or just one of them.
