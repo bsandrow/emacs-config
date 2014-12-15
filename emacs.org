@@ -220,13 +220,15 @@ The =exec-path= variable doesn't seem to get setup very well. I need
 to explicitly add =/usr/local/bin= to it:
 
 #+begin_src emacs-lisp
-(defun append-to-exec-path (path)
-  "Add PATH to EXEC-PATH"
-  (when (and (file-accessible-directory-p path)
-             (not (member 'path exec-path)))
-    (add-to-list 'exec-path path)))
+  (defun append-to-exec-path (path)
+    "Add PATH to EXEC-PATH"
+    (when (file-accessible-directory-p path)
+      (when (not (member 'path exec-path))
+        (add-to-list 'exec-path path))
+      (when (not (member 'path (split-string (getenv "PATH") ":")))
+        (setenv "PATH" (concat path ":" (getenv "PATH"))))))
 
-(append-to-exec-path "/usr/local/bin")
+  (append-to-exec-path "/usr/local/bin")
 #+end_src
 
 ** Packages
