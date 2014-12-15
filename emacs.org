@@ -230,30 +230,30 @@ to explicitly add =/usr/local/bin= to it:
 #+end_src
 
 ** Packages
-   
+
 Setup Emacs Lisp Package Archive (ELPA -- part of Emacs 24):
 
 #+begin_src emacs-lisp
-(setq package-user-dir (expand-file-name "elpa" dotfiles-dir))
+  (setq package-user-dir (expand-file-name "elpa" dotfiles-dir))
 
-(require 'cl)
-(require 'package)
+  (require 'cl)
+  (require 'package)
 
-(setq package-archives
-      '(("org" . "http://orgmode.org/elpa/")
-        ("gnu" . "http://elpa.gnu.org/packages/")
-        ("marmalade" . "http://marmalade-repo.org/packages/")
-        ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
-        ;("melpa" . "http://melpa.org/packages/")))
+  (setq package-archives
+        '(("org" . "http://orgmode.org/elpa/")
+          ("gnu" . "http://elpa.gnu.org/packages/")
+          ("marmalade" . "http://marmalade-repo.org/packages/")
+          ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
+          ;("melpa" . "http://melpa.org/packages/")))
 
-(package-initialize)
+  (package-initialize)
 
-;; Refreshing the package lists is nice, but not so nice when doing
-;; lots of edits to your config...
-;(package-refresh-contents)
+  ;; Refreshing the package lists is nice, but not so nice when doing
+  ;; lots of edits to your config...
+  ;(package-refresh-contents)
 #+end_src
 
-*Package Installation Code*
+Deprecated:
 
 #+begin_src emacs-lisp
 (defun packages-install (packages)
@@ -266,23 +266,14 @@ Setup Emacs Lisp Package Archive (ELPA -- part of Emacs 24):
       (delete-other-windows)))))
 #+end_src
 
-Deprecated Version:
+** use-package
 
-#+begin_src emacs-lisp :tangle no
-(defun require-package (package)
-  (setq-default highlight-tabs t)
-  "Install given PACKAGE."
-  (unless (package-installed-p package)
-    (unless (assoc package package-archive-contents)
-      (package-refresh-contents))
-    (package-install package)))
-#+end_src
-
-Packages:
+The =use-package= package.
 
 #+begin_src emacs-lisp
-(packages-install '(use-package))
-(require 'use-package)
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+  (require 'use-package)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -526,31 +517,31 @@ tend to get in the way.
   (setq inhibit-startup-message t)
   (setq initial-scratch-message nil)
   (setq visible-bell t)
-  
+
   ;; Disable the menu if we're on the console.
   (unless (window-system)
     (when (fboundp 'menu-bar-mode)
       (menu-bar-mode -1)))
-  
+
   ;; When we're in GUI mode, disable toolbars and scrollbars.
   (when (window-system)
     (when (fboundp 'tool-bar-mode)
       (tool-bar-mode -1))
-  
+
     (when (fboundp 'horizontal-scroll-bar-mode)
       (horizontal-scroll-bar-mode -1))
-  
+
     (when (fboundp 'scroll-bar-mode)
       (scroll-bar-mode -1)))
-  
+
   ;; Make sure that everyone reading the window title knows: THIS! IS! EMACS!
   (setq frame-title-format "%b - Emacs")
   (setq icon-title-format "%b - Emacs")
-  
+
   ;; Don't pull up a GUI-native file selector. Use the minibuffer. Ths
   ;; only way that FSM intended.
   (setq use-file-dialog nil)
-  
+
   ;; Default to 'truncating' display of long lines rather than
   ;; wrapping them.
   ;(setq-default truncate-lines t)
@@ -652,9 +643,11 @@ up. Not rocket science... :)
 depth with different colors. So far I find this useful in Emacs Lisp.
 
 #+begin_src emacs-lisp
-(packages-install '(rainbow-delimiters))
-(require 'rainbow-delimiters)
-(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+  (packages-install '(rainbow-delimiters))
+  (use-package rainbow-delimiters
+    :commands rainbow-delimiters-mode
+    :init (progn
+            (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)))
 #+end_src
 
 ** Colors
