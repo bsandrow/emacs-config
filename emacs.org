@@ -367,12 +367,17 @@ Remember the last edit position:
 
 ** Line Numbers
 
-*TODO* Limit this to particular modes rather than just enabling it
-everywhere.
+Turn on line numbers globally.
 
 #+begin_src emacs-lisp
-;; Line numbers on the left... globally
-(global-linum-mode 1)
+  (use-package linum
+    ;; :init
+    ;; (progn
+    ;;   ;; Line numbers on the left... globally
+    ;;   (global-linum-mode 1))
+    :config
+    (progn
+      (add-hook 'prog-mode-hook 'linum-mode)))
 #+end_src
 
 ** Modify "yes or no" Prompts
