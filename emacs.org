@@ -1306,30 +1306,48 @@ Configure =evil-mode= and =org-mode= to work together:
 * Coding
 ** Python
 
-Configure Emacs for editting Python.
-
-- *TODO* Better config
-- *TODO* More explanation
+Use [[https://launchpad.net/python-mode][=python-mode=]] to edit Python code. (By jove! I think he's onto something!)
 
 #+begin_src emacs-lisp
-  ;; http://www.emacswiki.org/emacs/ProgrammingWithPythonModeDotEl
-  ;; (add-to-list 'load-path (expand-file-name "python-mode.el-6.2.0" vendor-dir))
+    ;; http://www.emacswiki.org/emacs/ProgrammingWithPythonModeDotEl
+    ;; (add-to-list 'load-path (expand-file-name "python-mode.el-6.2.0" vendor-dir))
 
-  (use-package python-mode
-    :mode (("\\.py\\'" . python-mode)
-           ("\\.wsgi$" . python-mode))
-    :interpreter ("python" . python-mode)
-    :config
-    (progn
-      (add-hook 'python-mode-hook
-                (lambda ()
-                  ;; 4 spaces for Python. Set this explicitly just to
-                  ;; make sure. I want all Python files using 4 spaces.
-                  (setq tab-width 4)
-                  (setq python-indent tab-width)
-                  (setq python-indent-offset tab-width)
-                  (setq py-indent-offset tab-width)
-                  (color-identifiers-mode)))))
+    (use-package python-mode
+      :mode (("\\.py\\'" . python-mode)
+             ("\\.wsgi$" . python-mode))
+      :interpreter ("python" . python-mode)
+      :config
+      (progn
+        (add-hook 'python-mode-hook 'my-python-mode-prog-mode-fix)
+        (add-hook 'python-mode-hook 'my-python-mode-indentation)
+        ;; Should I move this to the color-identifiers-mode config?
+        (add-hook 'python-mode-hook 'color-identifiers-mode)))
+#+end_src
+
+Configure =python-mode='s indentation.
+
+#+begin_src emacs-lisp
+  (defun my-python-mode-indentation-config ()
+    "Configure python-mode indentation variables"
+    ;; 4 spaces for Python. Set this explicitly just to
+    ;; make sure. I want all Python files using 4 spaces.
+    (setq tab-width 4)
+    (setq python-indent tab-width)
+    (setq python-indent-offset tab-width)
+    (setq py-indent-offset tab-width))
+#+end_src
+
+The =python-mode= that comes with Emacs derives from =prog-mode=, but
+apparently [[https://launchpad.net/python-mode][the alternate =python-mode=]] that I'm using doens't derive
+from =prog-mode= so any =prog-mode-hook='s that I setup won't
+activate. We can fix that though. We have the technology...
+
+#+begin_src emacs-lisp
+  ;; For some reason python-mode doesn't derive from prog-mode, so they
+  ;; prog-mode-hooks don't get run. See more here:
+  ;;   https://github.com/flycheck/flycheck/issues/97
+  (defun my-python-mode-prog-mode-fix ()
+    (run-hooks 'prog-mode-hook))
 #+end_src
 
 ** JavaScript
