@@ -1539,9 +1539,9 @@ source (someone's =.emacs.d= on [[https://github.com][Github]]).
                                (emacs-reloaded)))
 #+end_src
 
-* The *FUTURE*!
+* The /FUTURE/
 ** TODO powerline
-
+   
 powerline: https://github.com/milkypostman/powerline
 powerline-evil: https://github.com/raugturi/powerline-evil
 
