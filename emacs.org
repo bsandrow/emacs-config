@@ -1341,7 +1341,6 @@ Configure =evil-mode= and =org-mode= to work together:
 - http://juanjoalvarez.net/es/detail/2014/sep/19/vim-emacsevil-chaotic-migration-guide/
 
 * Coding
-
 ** Flycheck
 
 [[https://github.com/flycheck/flycheck][Flycheck]] calls itself "Modern syntax checking for GNU Emacs."
@@ -1349,7 +1348,7 @@ Configure =evil-mode= and =org-mode= to work together:
 #+begin_src emacs-lisp
   (use-package flycheck
     :ensure flycheck
-    :config (add-hook 'prog-mode-hook 'fly-check-mode))
+    :config (add-hook 'prog-mode-hook 'flycheck-mode))
 #+end_src
 
 #+RESULTS:
@@ -1546,7 +1545,10 @@ powerline: https://github.com/milkypostman/powerline
 powerline-evil: https://github.com/raugturi/powerline-evil
 
 ** TODO Look into [[https://github.com/flycheck/flycheck][flycheck]] ([[http://www.emacswiki.org/emacs/Flycheck][emacswiki]]).
+
 Also: [[http://www.flycheck.org/en/latest/guide/languages.html#javascript][How to configure a particular JavaScript backend?]]
+
+- How to get flycheck to interface with virtualenv to find flake8?
 
 ** TODO Keep on Pimpin' That Config
 
