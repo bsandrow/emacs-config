@@ -85,6 +85,11 @@ hints like ',' to evaluate variables.
 
 Source: [[http://stackoverflow.com/questions/1664202/emacs-lisp-evaluate-variable-in-alist][Stack Overflow: Emacs Lisp Evaluate Variable in alist]]
 
+** "loop for <item> in <list> do <something>"
+
+http://stackoverflow.com/questions/8511583/elisp-loop-over-an-alist
+http://wikemacs.org/wiki/Evil#Enter_an_emacs_mode_in_a_given_state
+
 * Support Code
 ** Buffer Global replace-regexp
 
