@@ -1226,21 +1226,26 @@ it. I may have to implement this myself though.
 Configure =evil-mode= and =ibuffer-mode= to work together.
 
 #+begin_src emacs-lisp
-(evil-set-initial-state 'ibuffer-mode 'normal)
+  ;; Start ibuffer-mode out in 'normal' state
+  (evil-set-initial-state 'ibuffer-mode 'normal)
 
-(eval-after-load 'ibuffer
-  '(progn
-     ;; use the standard ibuffer bindings as a base
-     (set-keymap-parent (evil-get-auxiliary-keymap ibuffer-mode-map 'normal t)
-                        (assq-delete-all 'menu-bar (copy-keymap ibuffer-mode-map)))
-     (evil-define-key 'normal ibuffer-mode-map "j" 'ibuffer-forward-line)
-     (evil-define-key 'normal ibuffer-mode-map "k" 'ibuffer-backward-line)
-     (evil-define-key 'normal ibuffer-mode-map "J" 'ibuffer-jump-to-buffer) ; bound to "j" by default
-     (evil-define-key 'normal ibuffer-mode-map "/" 'evil-search-forward)
-     (evil-define-key 'normal ibuffer-mode-map "n" 'evil-search-next)
-     (evil-define-key 'normal ibuffer-mode-map "N" 'evil-search-previous)
-     (evil-define-key 'normal ibuffer-mode-map "?" 'evil-search-backward)
-   ))
+  (after 'ibuffer
+    ;; use the standard ibuffer bindings as a base
+    (set-keymap-parent
+     (evil-get-auxiliary-keymap ibuffer-mode-map 'normal t)
+     (assq-delete-all 'menu-bar (copy-keymap ibuffer-mode-map)))
+
+    ;; Add in our own bindings
+    (evil-define-key 'normal ibuffer-mode-map "j" 'ibuffer-forward-line)
+    (evil-define-key 'normal ibuffer-mode-map "k" 'ibuffer-backward-line)
+    (evil-define-key 'normal ibuffer-mode-map "/" 'evil-search-forward)
+    (evil-define-key 'normal ibuffer-mode-map "n" 'evil-search-next)
+    (evil-define-key 'normal ibuffer-mode-map "N" 'evil-search-previous)
+    (evil-define-key 'normal ibuffer-mode-map "?" 'evil-search-backward)
+
+    ;; this is bound to "j" by default
+    (evil-define-key 'normal ibuffer-mode-map "J" 'ibuffer-jump-to-buffer))
+
 #+end_src
 
 ** =org-mode=
