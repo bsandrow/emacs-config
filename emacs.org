@@ -679,14 +679,42 @@ Old Code:
 #+end_src
 
 ** Modeline
+*** Cursor Position
+
+Show the line number:
 
 #+begin_src emacs-lisp
 ;; line number in modeline
 (line-number-mode 1)
+#+end_src
 
+Show the column number:
+
+#+begin_src emacs-lisp
 ;; column number in modeline
 (column-number-mode 1)
 #+end_src
+
+*** Powerline
+
+Turn on powerline for a better modeline... a better
+/future/... \*stares into the distance\*.
+
+[[https://github.com/milkypostman/powerline][powerline]] is a port to Emacs of Vim's [[https://github.com/Lokaltog/vim-powerline][vim-powerline]]. This particular
+version of powerline is a fork of [[http://www.emacswiki.org/emacs/powerline.el][this original port]]. There are also
+[[https://github.com/jonathanchu/emacs-powerline][alternate]] [[https://github.com/Dewdrops/powerline][versions]] of powerline for Emacs.
+
+#+begin_src emacs-lisp
+  (use-package powerline
+    :ensure powerline
+    :config
+    (progn
+      (setq powerline-default-separator nil)
+      (powerline-default-theme)))
+#+end_src
+
+I've disabled the arrows for now, because the arrow colors were not
+matching the rest of the modeline, and were looking odd.
 
 ** Fic-Mode
 
@@ -1540,9 +1568,10 @@ source (someone's =.emacs.d= on [[https://github.com][Github]]).
 
 * The /FUTURE/
 ** TODO powerline
-   
+
 powerline: https://github.com/milkypostman/powerline
 powerline-evil: https://github.com/raugturi/powerline-evil
+smart-mode-line: https://github.com/Bruce-Connor/smart-mode-line
 
 ** TODO Look into [[https://github.com/flycheck/flycheck][flycheck]] ([[http://www.emacswiki.org/emacs/Flycheck][emacswiki]]).
 
@@ -1590,3 +1619,6 @@ Some sources of config/inspiration that I've tapped in the past:
 - http://www.emacswiki.org/Evil
 - http://changelog.complete.org/archives/661-so-long-vim-im-returning-to-emacs
 - http://juanjoalvarez.net/es/detail/2014/sep/19/vim-emacsevil-chaotic-migration-guide/
+- http://whattheemacsd.com/init.el-04.html (diminish-mode post)
+- http://hbin.me/blog/2012/08/26/clean-the-emacs-mode-line/ (clean up the emacs mode line)
+- [[http://raebear.net/comp/emacscolors.html][Colors Available to Emacs]]
