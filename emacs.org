@@ -1379,9 +1379,6 @@ Configure =evil-mode= and =org-mode= to work together:
     :config (add-hook 'prog-mode-hook 'flycheck-mode))
 #+end_src
 
-#+RESULTS:
-: t
-
 ** Python
 
 Use [[https://launchpad.net/python-mode][=python-mode=]] to edit Python code. (By jove! I think he's onto something!)
