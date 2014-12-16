@@ -1195,28 +1195,33 @@ it just makes sense (to me).
 (define-key minibuffer-local-isearch-map "\C-w" 'evil-delete-backward-word)
 #+end_src
 
-** =vim-commentary=
+** Replace =vim-commentary=
+
+[[https://github.com/tpope/vim-commentary][=vim-commentary=]] is a plugin by [[https://github.com/tpope][Tim Pope]] that I have been happy with
+on Vim. Here is where I attempt to get similar behaviour on Emacs.
+
+Note: There is also an [[https://github.com/redguardtoo/evil-nerd-commenter][Emacs port]] of Vim's [[https://github.com/scrooloose/nerdcommenter][NerdCommenter]].
 
 #+begin_src emacs-lisp
-;; vim-commentary
-;; ==============
-;; Replace tpope's vim-commentary
-;;
-;; TODO missing the 'gcu' binding to uncomment a region without a
-;; visual selection
-;;
-(defun evil-comment-dwim ()
+(defun my-evil-comment-dwim ()
   (interactive)
   "Like 'comment-dwim', but switches to Insert state when inserting a comment and not operating on a region."
   (unless (and mark-active transient-mark-mode)
     (unless (evil-insert-state-p)
   (evil-insert-state)))
   (call-interactively #'comment-dwim))
-(define-key evil-normal-state-map (kbd "gc") #'evil-comment-dwim)
 
+(define-key evil-normal-state-map (kbd "gc") #'my-evil-comment-dwim)
 #+end_src
 
-** =ibuffer-mode=
+*TODO* The =gcu= binding is missing. The current solutions I've look
+at in Emacs either operate on a single line, or a visual selection. In
+=vim-commentary=, the =gcu= binding attempts to figure out a comment
+block that the cursor is in the middle of, then uncomments the entire
+block. This isn't super-duper important functionality, but I like
+it. I may have to implement this myself though.
+
+** Integrate =evil-mode= and =ibuffer-mode=
 
 Configure =evil-mode= and =ibuffer-mode= to work together.
 
