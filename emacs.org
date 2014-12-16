@@ -1017,20 +1017,28 @@ Defer loading of =pomodoro= until =pomodoro-start= is called.
 
 Make Emacs a little more *evil*...
 
-** Initialize
+** evil-leader
 
-*NOTE:* =evil-leader= needs to be loaded *before* =evil-mode=.
+=evil-leader-mode= needs to be started prior to =evil-mode= per the
+[[https://github.com/cofi/evil-leader#usage][documentation]].
 
 #+begin_src emacs-lisp
-;; Setup evil-leader mode first
-(packages-install '(evil-leader))
-(require 'evil-leader)
-(global-evil-leader-mode)
+  (use-package evil-leader
+    :ensure evil-leader
+    :config (global-evil-leader-mode))
+#+end_src
 
-;; Setup evil-mode >:)
-(packages-install '(evil))
-(require 'evil)
-(evil-mode 1)
+** Initialize
+
+Make sure that =evil-mode= is installed and enabled.
+
+#+begin_src emacs-lisp
+  ;; Setup evil-mode >:)
+  (use-package evil
+    :ensure evil
+    :config
+    (progn
+      (evil-mode 1)))
 #+end_src
 
 ** Evil Ex Commands
