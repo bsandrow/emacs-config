@@ -959,6 +959,9 @@ comments (e.g. old-binding => new-binding), just for sanity's sake.
     ;; C-r ido-prev-match           => ido-reread-directory
     ;; C-s ido-next-match           => nil
     ;;
+    ;; Note: ido-delete-file-at-head reverts to kill-line if the
+    ;; cursor is not at the end of the line.
+    ;;
     (define-key ido-file-completion-map "\C-j" 'ido-next-match)
     (define-key ido-file-completion-map "\C-k" 'ido-prev-match)
     (define-key ido-file-completion-map "\C-l" 'ido-select-text)
