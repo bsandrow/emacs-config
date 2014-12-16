@@ -280,13 +280,8 @@ The =use-package= package.
 
 #+begin_src emacs-lisp
 (packages-install '(vc-darcs
-                    ibuffer
-                    ibuffer-vc
                     magit
-                    ido-vertical-mode
-                    projectile
                     flx
-                    flx-ido
                     git-commit-mode
                     git-rebase-mode
                     gitconfig-mode
@@ -799,8 +794,6 @@ feel like =ibuffer-mode= has more functionality.
   ;; interact. packages-install doesn't do anything if the packages
   ;; are already installed, but if it needs to install them, it also
   ;; loads them IIRC. I'm not sure how use-package will handle that.
-  (packages-install '(ibuffer ibuffer-vc))
-
   (defun my-ibuffer-vc-hook ()
     "Use ibuffer-vc to group by project root."
     (ibuffer-vc-set-filter-groups-by-vc-root)
@@ -808,11 +801,17 @@ feel like =ibuffer-mode= has more functionality.
       (ibuffer-do-sort-by-alphabetic)))
 
   (use-package ibuffer
+    :ensure ibuffer
     :commands ibuffer-mode
     :defer 1
-    :config (progn
-              (require 'ibuffer-vc)
-              (add-hook 'ibuffer-hook 'my-ibuffer-vc-hook)))
+    :config
+    (progn
+      (add-hook 'ibuffer-hook 'my-ibuffer-vc-hook)))
+
+  (use-package ibuffer-vc
+    :ensure ibuffer-vc
+    :commands ibuffer-vc-set-filter-groups-by-vc-root
+    :defer 1)
 #+end_src
 
 *TODO*: Implement some non-Version Control based groups. There are
