@@ -1540,7 +1540,11 @@ source (someone's =.emacs.d= on [[https://github.com][Github]]).
 #+end_src
 
 * The *FUTURE*!
-** TODO Look into the =use-package= package.
+** TODO powerline
+
+powerline: https://github.com/milkypostman/powerline
+powerline-evil: https://github.com/raugturi/powerline-evil
+
 ** TODO Look into [[https://github.com/flycheck/flycheck][flycheck]] ([[http://www.emacswiki.org/emacs/Flycheck][emacswiki]]).
 Also: [[http://www.flycheck.org/en/latest/guide/languages.html#javascript][How to configure a particular JavaScript backend?]]
 
@@ -1571,6 +1575,10 @@ Resources:
 - [ ] [[http://www.howardism.org/Technical/Emacs/literate-devops.html][Literate DevOps]]
 - [ ] [[http://uncommonlisp.blogspot.ca/2013/01/emacs-vs-vim-part-2.html][Uncommon Lisp]]
 - [ ] [[https://news.ycombinator.com/item?id=8709996][Emacs Isn't For Everyone]]
+
+** TODO evil-tabs + elscreen
+
+https://github.com/krisajenkins/evil-tabs
 
 * Misc. Sources
 
