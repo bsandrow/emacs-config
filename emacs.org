@@ -766,6 +766,14 @@ Install / Configure color themes. :)
 - http://www.emacswiki.org/emacs/?action=browse;oldid=ColorTheme;id=ColorAndCustomThemes
 - https://github.com/sellout/emacs-color-theme-solarized/
 
+** Increase / Decrease Font Size
+
+#+begin_src emacs-lisp
+  (when (window-system)
+    (bind-key "s-+" 'text-scale-increase)
+    (bind-key "s--" 'text-scale-decrease))
+#+end_src
+
 * Navigation
 ** ibuffer-mode
 
