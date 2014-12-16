@@ -312,13 +312,17 @@ configuration settings from [[https://github.com/sachac/.emacs.d/blob/gh-pages/S
 #+begin_src emacs-lisp
   (packages-install '(savehist))
   (use-package savehist
-    :config (savehist-mode 1))
-  (setq savehist-file (expand-file-name "savehist" dotfiles-dir))
-  (setq history-length t)
-  (setq history-delete-duplicates t)
-  (setq savehist-save-minibuffer-history t)
-  (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
-  (setq savehist-autosave-interval 60)
+    :init
+    (progn
+      (setq savehist-file (expand-file-name "savehist" dotfiles-dir))
+      (setq history-length t)
+      (setq history-delete-duplicates t)
+      (setq savehist-save-minibuffer-history t)
+      (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+      (setq savehist-autosave-interval 60))
+    :config
+    (progn
+      (savehist-mode 1)))
 #+end_src
 
 ** Backups
