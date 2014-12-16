@@ -874,9 +874,12 @@ Some scratch work:
 ** Ido mode
 
 #+begin_src emacs-lisp
-  (use-package ido
-    :ensure ido
-    :config (ido-mode t))
+    (use-package ido
+      :ensure ido
+      :config
+      (progn
+        (ido-mode t)
+        (add-hook 'ido-setup-hook 'my-ido-keymap-mods)))
 #+end_src
 
 I prefer my matches to be shown vertically (like Vim's [[https://github.com/kien/ctrlp.vim][CtrlP]] or
@@ -928,30 +931,39 @@ very basic for the time-being, but I'll improve it over time.
       (ido-find-file)))
 #+end_src
 
-** Ido mode Keymaps
-
-Keymaps! I don't like the default =ido-mode= keymaps. I'm used to
-using bindings like =C-j= and =C-k= to cycle through the list of
-results (using CtrlP in Vim). Vim has programmed me to want =j= and
-=k= as up and down movement keys.
+I don't like the default keymap for =ido-mode= completion ui. I would
+rather use =C-j= / =C-k= (like Vim's CtrlP) to scroll up and down
+through the matches than =C-s= / =C-r=. There modifications are mostly
+about reorganizing the keymaps to accomodate this without losing
+functionality. I've also mapped out what the changes are in the
+comments (e.g. old-binding => new-binding), just for sanity's sake.
 
 #+begin_src emacs-lisp
-;; Other Keymap Changes:
-;;  C-j ido-select-text          => ido-next-match
-;;  C-k ido-delete-file-at-head  => ido-prev-match
-;;  C-l ido-reread-directory     => ido-select-text
-;;  C-r ido-prev-match           => ido-reread-directory
-;;  C-s ido-next-match           => nil
+  (defun my-ido-keymap-mods ()
+    "Changes to the default ido-mode keymaps"
+    ;; ido-common-completion-map
+    ;; -------------------------
+    ;; C-j ido-select-text                 => ido-next-match
+    ;; C-k kill-line (simple.el)           => ido-prev-match
+    ;; C-l recenter-top-bottom (window.el) => ido-select-text
+    ;;
+    (define-key ido-common-completion-map "\C-j" 'ido-next-match)
+    (define-key ido-common-completion-map "\C-k" 'ido-prev-match)
+    (define-key ido-common-completion-map "\C-l" 'ido-select-text)
 
-;; TODO Write my own ido-prev-match that deletes to end of input if
-;; the cursor is not at the end of the user input (like the
-;; delete-file-at-head does).
-
-(define-key ido-file-completion-map "\C-j" 'ido-next-match)
-(define-key ido-file-completion-map "\C-k" 'ido-prev-match)
-(define-key ido-file-completion-map "\C-l" 'ido-select-text)
-(define-key ido-file-completion-map "\C-r" 'ido-reread-directory)
-(define-key ido-file-completion-map "\C-s" nil)
+    ;; ido-file-completion-map
+    ;; -----------------------
+    ;; C-j ido-select-text          => ido-next-match
+    ;; C-k ido-delete-file-at-head  => ido-prev-match
+    ;; C-l ido-reread-directory     => ido-select-text
+    ;; C-r ido-prev-match           => ido-reread-directory
+    ;; C-s ido-next-match           => nil
+    ;;
+    (define-key ido-file-completion-map "\C-j" 'ido-next-match)
+    (define-key ido-file-completion-map "\C-k" 'ido-prev-match)
+    (define-key ido-file-completion-map "\C-l" 'ido-select-text)
+    (define-key ido-file-completion-map "\C-r" 'ido-reread-directory)
+    (define-key ido-file-completion-map "\C-s" nil))
 #+end_src
 
 Let's get =C-w= working to delete words backwards in =ido-mode=. Well,
