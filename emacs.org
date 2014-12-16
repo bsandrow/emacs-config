@@ -1323,7 +1323,11 @@ Configure Emacs for editting Python.
     (progn
       (add-hook 'python-mode-hook
                 (lambda ()
+                  ;; 4 spaces for Python. Set this explicitly just to
+                  ;; make sure. I want all Python files using 4 spaces.
+                  (setq tab-width 4)
                   (setq python-indent tab-width)
+                  (setq python-indent-offset tab-width)
                   (setq py-indent-offset tab-width)
                   (color-identifiers-mode)))))
 #+end_src
