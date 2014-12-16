@@ -294,6 +294,14 @@ The =use-package= package.
                     gitattributes-mode))
 #+end_src
 
+** Diminish
+
+#+begin_src emacs-lisp
+  (use-package diminish
+    :commands diminish
+    :defer 1)
+#+end_src
+
 * General Configuration
 ** History
 
@@ -484,18 +492,13 @@ that =emacs-client= works.
 
 #+begin_src emacs-lisp
   (use-package undo-tree
-    :config
+    ;:diminish (undo-tree-mode . " ↺") ; shorten modeline display
+    :diminish undo-tree-mode
+    :init
     (progn
-      (diminish 'undo-tree-mode " ↺") ; shorten modeline display
-    ))
-#+end_src
-
-** Diminish
-
-#+begin_src emacs-lisp
-  (use-package diminish
-    :commands diminish
-    :defer 1)
+      (global-undo-tree-mode)
+      (setq undo-tree-visualizer-timestamps t)
+      (setq undo-tree-visualizer-diff t)))
 #+end_src
 
 * Global Formatting
