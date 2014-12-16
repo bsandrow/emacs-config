@@ -1321,6 +1321,20 @@ Configure =evil-mode= and =org-mode= to work together:
 - http://juanjoalvarez.net/es/detail/2014/sep/19/vim-emacsevil-chaotic-migration-guide/
 
 * Coding
+
+** Flycheck
+
+[[https://github.com/flycheck/flycheck][Flycheck]] calls itself "Modern syntax checking for GNU Emacs."
+
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :ensure flycheck
+    :config (add-hook 'prog-mode-hook 'fly-check-mode))
+#+end_src
+
+#+RESULTS:
+: t
+
 ** Python
 
 Use [[https://launchpad.net/python-mode][=python-mode=]] to edit Python code. (By jove! I think he's onto something!)
@@ -1366,6 +1380,10 @@ activate. We can fix that though. We have the technology...
   (defun my-python-mode-prog-mode-fix ()
     (run-hooks 'prog-mode-hook))
 #+end_src
+
+*TODO* Getting VirtualENVs working
+*TODO* Getting VirtualENVs setup if in the correct directory.
+*TODO* Get virstualenvs and flycheck-mode working.
 
 ** JavaScript
 
