@@ -716,7 +716,8 @@ Show the column number:
 
 *** Flat Modeline
 
-Make the modeline flat.
+Make the modeline flat. Information gleaned from [[http://www.reddit.com/r/emacs/comments/23l9oi/flat_modeline/?utm_source=dlvr.it&utm_medium=twitter][this Reddit
+discussion]].
 
 #+begin_src emacs-lisp
   (defun no-boxy-modeline ()
@@ -755,7 +756,6 @@ version of powerline is a fork of [[http://www.emacswiki.org/emacs/powerline.el]
 
 I've disabled the arrows for now, because the arrow colors were not
 matching the rest of the modeline, and were looking odd.
-
 
 ** Fic-Mode
 
@@ -1673,7 +1673,9 @@ powerline: https://github.com/milkypostman/powerline
 powerline-evil: https://github.com/raugturi/powerline-evil
 smart-mode-line: https://github.com/Bruce-Connor/smart-mode-line
 
-Powerline color weirdness: [[http://emacsredux.com/blog/2014/01/11/a-peek-at-emacs-24-dot-4-srgb-colours-on-os-x/][this]] seems to solve it. It has something to
+*** DONE Fix Separator Weirdness
+
+[[http://emacsredux.com/blog/2014/01/11/a-peek-at-emacs-24-dot-4-srgb-colours-on-os-x/][this]] seems to solve it. It has something to
 do with sRGB colourspace.
 
 ** TODO Look into [[https://github.com/flycheck/flycheck][flycheck]] ([[http://www.emacswiki.org/emacs/Flycheck][emacswiki]]).
