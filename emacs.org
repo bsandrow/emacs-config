@@ -1706,11 +1706,6 @@ powerline: https://github.com/milkypostman/powerline
 powerline-evil: https://github.com/raugturi/powerline-evil
 smart-mode-line: https://github.com/Bruce-Connor/smart-mode-line
 
-*** DONE Fix Separator Weirdness
-
-[[http://emacsredux.com/blog/2014/01/11/a-peek-at-emacs-24-dot-4-srgb-colours-on-os-x/][this]] seems to solve it. It has something to
-do with sRGB colourspace.
-
 ** TODO Look into [[https://github.com/flycheck/flycheck][flycheck]] ([[http://www.emacswiki.org/emacs/Flycheck][emacswiki]]).
 
 Also: [[http://www.flycheck.org/en/latest/guide/languages.html#javascript][How to configure a particular JavaScript backend?]]
@@ -1748,6 +1743,11 @@ Resources:
 ** TODO evil-tabs + elscreen
 
 https://github.com/krisajenkins/evil-tabs
+
+** DONE Fix powerline Separator Weirdness
+
+[[http://emacsredux.com/blog/2014/01/11/a-peek-at-emacs-24-dot-4-srgb-colours-on-os-x/][this]] seems to solve it. It has something to
+do with sRGB colourspace.
 
 ** DONE Convert over to =after= macro
 
