@@ -1695,6 +1695,9 @@ source (someone's =.emacs.d= on [[https://github.com][Github]]).
 #+end_src
 
 * The /FUTURE/
+  :PROPERTIES:
+  :tangle: no
+  :END:
 ** TODO What's the best way to track project root?
 
 Is the best way to just continue using Projectile? I mainly started
@@ -1746,7 +1749,7 @@ What do I really want this to do?
 
 The main things here that I care about are running =grunt= and =jshint= (via Flycheck) from within Emacs.
 
--- 
+--
 
 The lack of =exec-path= handling in =nvm.el= puts it at odds with
 =flycheck-mode= finding jshint.
@@ -1785,6 +1788,8 @@ imported into a single Emacs buffer:
 
 (add-hook 'guile-hook 'my-guile-setup)
 #+end_src
+
+Need to set jshintrc in the hook maybe?
 
 ** TODO powerline
 
