@@ -716,8 +716,12 @@ Show the column number:
 
 *** Flat Modeline
 
-Make the modeline flat. Information gleaned from [[http://www.reddit.com/r/emacs/comments/23l9oi/flat_modeline/?utm_source=dlvr.it&utm_medium=twitter][this Reddit
-discussion]].
+Make the modeline flat and not [[][Boxy]]. Information gleaned from
+[[http://www.reddit.com/r/emacs/comments/23l9oi/flat_modeline/?utm_source=dlvr.it&utm_medium=twitter][this Reddit discussion]].
+
+Note: I've made this into a function because running this prior to
+Powerline wasn't having the desired effect. This way I can bind a call
+to powerline configuration.
 
 #+begin_src emacs-lisp
   (defun no-boxy-modeline ()
@@ -735,16 +739,17 @@ Turn on powerline for a better modeline... a better
 version of powerline is a fork of [[http://www.emacswiki.org/emacs/powerline.el][this original port]]. There are also
 [[https://github.com/jonathanchu/emacs-powerline][alternate]] [[https://github.com/Dewdrops/powerline][versions]] of powerline for Emacs.
 
+The history seems to all stem from =powerline.el= that was uploaded to
+EmacsWiki. Two versions spawned from that: the [[https://github.com/milkypostman][milkypostman]] version,
+and the [[https://github.com/jonathanchu][jonathanchu]] version. There looks to be several forks of the
+milkypostman version. There are a couple of smaller forks of the
+original =powerline.el= too.
+
 #+begin_src emacs-lisp
   (use-package powerline
     :config
     (progn
-      ;; Emacs 24.4 on OSX Cocoa has sRGB support. If enabled, the XPMs
-      ;; that are generated for the separators have the colors screwed
-      ;; up. They are 'almost' the right color, but lighter. This makes
-      ;; the whole thing look bad. Let's just turn them off for now...
-      (setq ns-use-srgb-colorspace nil)
-
+      (my-powerline-fix-separator-pixmaps)
       (setq powerline-default-separator 'arrow)
       (powerline-evil-theme)
 
@@ -752,6 +757,23 @@ version of powerline is a fork of [[http://www.emacswiki.org/emacs/powerline.el]
       ;; "stick" unless I call it after the powerline theme is
       ;; initialized.
       (no-boxy-modeline)))
+#+end_src
+
+The separator pixmaps have 'off' colurs on OSX + Emacs 24.4. The
+following fixes that.
+
+*Explanation*: This looks to be related to the newly enabled sRGB
+support (Emacs 24.4 + Mac OSX Cocoa). The separators are supposed to
+be generated with the same colors as the adjacent sections, but the
+colors turn on only 'almost' there (slightly off-color). Turning off
+said support fixes the issue and the separators are generated with
+correct colors.
+
+#+begin_src emacs-lisp
+  (defun my-powerline-fix-separator-pixmaps ()
+    "The separator pixmaps have 'off' colurs on OSX + Emacs 24.4"
+    (when (eq window-system ns)
+      (setq ns-use-srgb-colorspace nil)))
 #+end_src
 
 I've disabled the arrows for now, because the arrow colors were not
