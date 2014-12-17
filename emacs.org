@@ -747,19 +747,6 @@ and the [[https://github.com/jonathanchu][jonathanchu]] version. There looks to 
 milkypostman version. There are a couple of smaller forks of the
 original =powerline.el= too.
 
-#+begin_src emacs-lisp
-  (use-package powerline
-    :config
-    (progn
-      (my-powerline-fix-separator-pixmaps)
-      (setq powerline-default-separator 'arrow)
-      (powerline-evil-theme)
-
-      ;; This seems like the best place to put this. It doesn't seem to
-      ;; "stick" unless I call it after the powerline theme is
-      ;; initialized.
-      (no-boxy-modeline)))
-#+end_src
 
 The separator pixmaps have 'off' colurs on OSX + Emacs 24.4. The
 following fixes that.
@@ -772,14 +759,25 @@ said support fixes the issue and the separators are generated with
 correct colors.
 
 #+begin_src emacs-lisp
-  (defun my-powerline-fix-separator-pixmaps ()
+  (defun bsandrow/powerline-fix-separator-pixmaps ()
     "The separator pixmaps have 'off' colurs on OSX + Emacs 24.4"
-    (when (eq window-system ns)
+    (when (eq window-system 'ns)
       (setq ns-use-srgb-colorspace nil)))
 #+end_src
 
-I've disabled the arrows for now, because the arrow colors were not
-matching the rest of the modeline, and were looking odd.
+#+begin_src emacs-lisp
+  (use-package powerline
+    :config
+    (progn
+      (bsandrow/powerline-fix-separator-pixmaps)
+      (setq powerline-default-separator 'arrow)
+      (powerline-evil-theme)
+
+      ;; This seems like the best place to put this. It doesn't seem to
+      ;; "stick" unless I call it after the powerline theme is
+      ;; initialized.
+      (no-boxy-modeline)))
+#+end_src
 
 ** Fic-Mode
 
@@ -1511,7 +1509,8 @@ Note:
                 (setq-default js2-auto-indent-p t))
     :config
     (progn
-      (add-hook 'js2-mode-hook 'bs/nodejs-modules-check)
+      (add-hook 'js2-mode-hook 'bs/js2-process-environment)
+      ;; (add-hook 'js2-mode-hook 'bs/nodejs-modules-check)
       (add-hook 'js2-mode-hook 'bs/turn-on-flycheck-mode-js2)
 
       ;; Replace 'function' with 'ƒ'
@@ -1538,14 +1537,6 @@ Configure indentation controls:
   ;(setq-default js2-mode-indent-ignore-first-tab t)
 #+end_src
 
-#+begin_src emacs-lisp
-  (defun bs/turn-on-flycheck-mode-js2 ()
-    "Turn on and define JS2 mode checker"
-    (flycheck-select-checker 'javascript-jslist-reporter)
-    ;(flycheck-select-checker 'javascript-jshint-reporter)
-    (flycheck-mode 1))
-#+end_src
-
 Clean up whitespace sometimes:
 
 #+begin_src emacs-lisp
@@ -1557,7 +1548,7 @@ Control over errors:
 #+begin_src emacs-lisp
 
   ;; Let flymake do the error-parsing
-  ;;(setq-default js2-show-parse-errors nil)
+  (setq-default js2-show-parse-errors nil)
 
   (setq-default js2-global-externs
                 '("assert" "refute" "setTimeout" "clearTimeout"
@@ -1572,21 +1563,51 @@ Control over errors:
 Node.js local modules
 
 #+begin_src emacs-lisp
-  (defun bs/nodejs-modules-check ()
-    "Add local node_modules directory to $PATH & exec-path"
-    (if (projectile-project-p)
-        (let ((node-modules (expand-file-name
-                             ".bin" (expand-file-name
-                                     "node_modules" (projectile-project-root)))))
-          (if (file-accessible-directory-p node-modules)
-              (append-to-exec-path node-modules)))
-      (let ((cwd (file-name-directory
-                  (or (buffer-file-name) load-file-name)))
-            (node-modules (expand-file-name
-                           ".bin" (expand-file-name
-                                   "node_modules" cwd))))
-        (if (file-accessible-directory-p node-modules)
-            (append-to-exec-path node-modules)))))
+  ;; (defun bs/nodejs-modules-check ()
+  ;;   "Add local node_modules directory to $PATH & exec-path"
+  ;;   (if (projectile-project-p)
+  ;;       (let ((node-modules (expand-file-name
+  ;;                            ".bin" (expand-file-name
+  ;;                                    "node_modules" (projectile-project-root)))))
+  ;;         (if (file-accessible-directory-p node-modules)
+  ;;             (append-to-exec-path node-modules)))
+  ;;     (let ((cwd (file-name-directory
+  ;;                 (or (buffer-file-name) load-file-name)))
+  ;;           (node-modules (expand-file-name
+  ;;                          ".bin" (expand-file-name
+  ;;                                  "node_modules" cwd))))
+  ;;       (if (file-accessible-directory-p node-modules)
+  ;;           (append-to-exec-path node-modules)))))
+#+end_src
+
+*** Local process-environment
+
+#+begin_src emacs-lisp
+  (defun bs/js2-process-environment ()
+    (make-local-variable 'process-environment))
+#+end_src
+
+*** js2-mode + flycheck-mode
+
+#+begin_src emacs-lisp
+  (defun bs/turn-on-flycheck-mode-js2 ()
+    "Turn on and define JS2 mode checker"
+    ;(flycheck-select-checker 'javascript-jslist-reporter)
+    (flycheck-select-checker 'javascript-jshint)
+    (flycheck-mode 1))
+#+end_src
+
+*** nvm.el
+
+Use nvm.el to globally setup NVM environment.
+
+#+begin_src emacs-lisp
+  (use-package nvm
+    :ensure nvm
+    :config
+    (progn
+      (nvm-use "v0.10.21")
+      (append-to-exec-path "/Users/bjs/.nvm/v0.10.21/bin")))
 #+end_src
 
 * Text Editing
@@ -1673,6 +1694,26 @@ source (someone's =.emacs.d= on [[https://github.com][Github]]).
 #+end_src
 
 * The /FUTURE/
+** TODO What's the best way to track project root?
+
+Is the best way to just continue using Projectile? I mainly started
+using Projectile for 'find in project' functionality. Is there a
+better way of finding the project root for the purposes of building
+functionality on?
+
+For example, I have a hook that adds "$DIR/node_modules/.bin" to $PATH
+and exec-path as a js2-mode hook. I want "$DIR" to be the project
+root, if there is one, otherwise I want it to be the current
+directory.
+
+Should I just continue to build this functionality off of Projectile?
+I'm just wondering if there is a more 'focused' or 'standard' way of
+doing it, so that I don't have to change all of this functionality if
+I decide that I don't want to use Projectile for project-based
+find-file?
+
+There is [[http://solovyov.net/project-root/][project-root.el]] that looks fairly simple...
+
 ** TODO electric-indent-mode?
 
 http://emacsredux.com/blog/2014/01/19/a-peek-at-emacs-24-dot-4-auto-indentation-by-default/
@@ -1691,7 +1732,11 @@ http://emacsredux.com/blog/2014/01/19/a-peek-at-emacs-24-dot-4-auto-indentation-
 
 ** TODO nvm + Emacs
 
-Looks like there is [[https://github.com/rejeep/nvm.el][nvm.el]], but I also see [[https://github.com/jimeh/.emacs.d/blob/master/env.el][hardcoded paths in Emacs configs]]. =nvm.el= does /not/ seem to touch =exec-path= it only sets environment variables. I guess this is useful for launching shells in subprocesses (e.g. =eshell=), but it doesn't really help in the case of things like =executable-find=.
+Looks like there is [[https://github.com/rejeep/nvm.el][nvm.el]], but I also see [[https://github.com/jimeh/.emacs.d/blob/master/env.el][hardcoded paths in Emacs
+configs]]. =nvm.el= does /not/ seem to touch =exec-path= it only sets
+environment variables. I guess this is useful for launching shells in
+subprocesses (e.g. =eshell=), but it doesn't really help in the case
+of things like =executable-find=.
 
 What do I really want this to do?
 
@@ -1699,6 +1744,46 @@ What do I really want this to do?
 2. Flycheck should find =jshint= in the =nvm= path.
 
 The main things here that I care about are running =grunt= and =jshint= (via Flycheck) from within Emacs.
+
+-- 
+
+The lack of =exec-path= handling in =nvm.el= puts it at odds with
+=flycheck-mode= finding jshint.
+
+--
+
+[[http://stackoverflow.com/questions/16786831/how-can-i-set-environment-variables-to-a-buffer-local-scope-in-emacs][Making environment variables buffer-local]]:
+
+You can do this by making =process-environment= buffer-local:
+
+#+begin_src emacs-lisp :tangle no
+(defun setup-some-mode-env ()
+  (make-local-variable 'process-environment)
+  ;; inspect buffer-file-name and add stuff to process-environment as necessary
+  ...)
+(add-hook 'some-major-mode 'setup-some-mode-env)
+#+end_src
+
+A more elaborate example is this code that imports the Guile
+environment setup created by an external script. The script is
+designed to be "sourced" in the shell, but here its result gets
+imported into a single Emacs buffer:
+
+#+begin_src emacs-lisp :tangle no
+(defun my-guile-setup ()
+  (make-local-variable 'process-environment)
+  (with-temp-buffer
+    (call-process "bash" nil t nil "-c"
+          "source ~/work/guileenv; env | egrep 'GUILE|LD_LIBRARY_PATH'")
+    (goto-char (point-min))
+    (while (not (eobp))
+      (setq process-environment
+        (cons (buffer-substring (point) (line-end-position))
+          process-environment))
+      (forward-line 1))))
+
+(add-hook 'guile-hook 'my-guile-setup)
+#+end_src
 
 ** TODO powerline
 
@@ -1744,6 +1829,10 @@ Resources:
 
 https://github.com/krisajenkins/evil-tabs
 
+** TODO Read up on Cask
+
+https://github.com/cask/cask
+
 ** DONE Fix powerline Separator Weirdness
 
 [[http://emacsredux.com/blog/2014/01/11/a-peek-at-emacs-24-dot-4-srgb-colours-on-os-x/][this]] seems to solve it. It has something to
@@ -1751,7 +1840,7 @@ do with sRGB colourspace.
 
 ** DONE Convert over to =after= macro
 
-Go through everything and convert it over to using the =after= macro instead of
+Go through everything and convert it over to using the =after= macro.
 
 ** DONE ido-vertical-mode scrolling
 
