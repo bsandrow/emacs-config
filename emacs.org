@@ -618,6 +618,7 @@ not sure if this would affect both of them, or just one of them.
 
 #+begin_src emacs-lisp
   (use-package color-identifiers-mode
+    :diminish color-identifiers-mode
     :commands color-identifiers-mode
     :defer 1)
 #+end_src
