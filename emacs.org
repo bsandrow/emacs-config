@@ -50,7 +50,6 @@ seems to require =:tangle on= for blocks that are in languages other
 than =emacs-lisp=.
 
 * Emacs Lisp Notes
-
 ** RESOURCES:
 
 - http://stackoverflow.com/questions/2234860/lisp-filter-out-results-from-list-not-matching-predicate
@@ -89,6 +88,16 @@ Source: [[http://stackoverflow.com/questions/1664202/emacs-lisp-evaluate-variabl
 
 http://stackoverflow.com/questions/8511583/elisp-loop-over-an-alist
 http://wikemacs.org/wiki/Evil#Enter_an_emacs_mode_in_a_given_state
+
+** LET vs LET*
+http://stackoverflow.com/questions/554949/let-versus-let-in-common-lisp
+** Ternary Operator
+
+=a > b ? a : b= becomes:
+
+#+begin_src emacs-lisp
+(if (> a b) a b)
+#+end_src
 
 * Support Code
 ** Buffer Global replace-regexp
@@ -186,6 +195,18 @@ Reverse of filter. Return all items that don't match =condp=.
 don't match the predicate."
   (delq nil
         (mapcar (lambda (x) (and (not (funcall condp x)) x)) lst)))
+#+end_src
+
+** String Functions
+
+From [[http://www.emacswiki.org/emacs/ElispCookbook][EmacsWiki.org]]:
+
+#+begin_src emacs-lisp
+  (defun string/starts-with (string prefix)
+      "Return t if STRING starts with prefix."
+      (and (string-match (rx-to-string `(: bos ,prefix) t)
+                         string)
+           t))
 #+end_src
 
 * Initialization
@@ -359,10 +380,10 @@ Configure /how/ we save backups:
 Remember the last edit position:
 
 #+begin_src emacs-lisp
-(packages-install '(saveplace))
-(use-package saveplace)
-(setq save-place-file (expand-file-name "saveplace" dotfiles-dir))
-(setq-default save-place t)
+  (use-package saveplace
+    :ensure saveplace
+    :init (setq-default save-place t)
+    :config (setq save-place-file (expand-file-name "saveplace" dotfiles-dir)))
 #+end_src
 
 ** Line Numbers
@@ -392,6 +413,7 @@ string) to the function =y-or-n-p= (which only prompts for =y= or
 ;; Only prompt for y/n rather than yes/no
 (defalias 'yes-or-no-p 'y-or-n-p)
 #+end_src
+
 ** Ack
 
 Configure =ack-and-a-half=.
@@ -418,8 +440,6 @@ Sources:
 (setq scroll-step 1) ; keyboard scroll one line at a time
 #+end_src
 
-*TODO* Tweak the scroll accelerate setting. I think that I want to
- accelerate scrolling, but before it was /way/ too sensitive.
 ** Frames
 
 This allows one to toggle usage of OSX's native full screen
@@ -458,7 +478,6 @@ Give me the power to maximize the frame dimensions without using
 
 ** Folding
 #+begin_src emacs-lisp
-;; TODO: Convert to use 'after' macro
 (eval-after-load 'hideshow
   '(progn
      (defun evil-za ()
@@ -1445,6 +1464,8 @@ Note:
                 (setq-default js2-auto-indent-p t))
     :config
     (progn
+      (add-hook 'js2-mode-hook 'my-nodejs-modules-check)
+
       ;; Replace 'function' with 'ƒ'
       (font-lock-add-keywords
        'js2-mode
@@ -1483,13 +1504,33 @@ Control over errors:
   ;;(setq-default js2-show-parse-errors nil)
 
   (setq-default js2-global-externs
-                '("assert" "refute" "setTimeout"
-                  "clearTimeout" "setInterval"
-                  "clearInterval" "console" "JSON"
-                  "jQuery" "$" "angular" "Ember"))
+                '("assert" "refute" "setTimeout" "clearTimeout"
+                  "setInterval" "clearInterval" "console" "JSON"
+                  "jQuery" "$" "angular" "Ember" "module" "require"
+                  "process"))
 
   ;; TODO What does this do:
   (setq js2-mode-toggle-warnings-and-errors t)
+#+end_src
+
+Node.js local modules
+
+#+begin_src emacs-lisp
+  (defun my-nodejs-modules-check ()
+    "Add local node_modules directory to $PATH & exec-path"
+    (if (projectile-project-p)
+        (let ((node-modules (expand-file-name
+                             ".bin" (expand-file-name
+                                     "node_modules" (projectile-project-root)))))
+          (if (file-accessible-directory-p node-modules)
+              (append-to-exec-path node-modules)))
+      (let ((cwd (file-name-directory
+                  (or (buffer-file-name) load-file-name)))
+            (node-modules (expand-file-name
+                           ".bin" (expand-file-name
+                                   "node_modules" cwd))))
+        (if (file-accessible-directory-p node-modules)
+            (append-to-exec-path node-modules)))))
 #+end_src
 
 * Text Editing
@@ -1505,6 +1546,18 @@ Use =markdown-mode= to edit Markdown files.
            ;("\\.text\\'" . markdown-mode)
            ("\\.md\\'" . markdown-mode)))
 #+end_src
+* Work Stuff
+
+#+begin_src emacs-lisp
+  (defun sowingo-js2-setup ()
+    "Setup js2-mode for Sowingo projects."
+    (when (and (projectile-project-p)
+               (string/starts-with (expand-file-name (projectile-project-root))
+                                   (expand-file-name "~/work/sowingo")))
+      (message "Sowingo Project: %s" (expand-file-name (projectile-project-root)))
+      ))
+#+end_src
+
 * Advanced Stuff
 ** Edit With Emacs
 
@@ -1564,6 +1617,32 @@ source (someone's =.emacs.d= on [[https://github.com][Github]]).
 #+end_src
 
 * The /FUTURE/
+** TODO Convert over to =after= macro
+
+Go through everything and convert it over to using the =after= macro instead of
+
+** TODO Tweak scroll accelerate settings
+
+ Tweak the scroll accelerate setting. I think that I want to
+ accelerate scrolling, but before it was /way/ too sensitive.
+
+** TODO Figure out what this does:
+
+#+begin_example
+  (setq js2-mode-toggle-warnings-and-errors t)
+#+end_example
+
+** TODO nvm + Emacs
+
+Looks like there is [[https://github.com/rejeep/nvm.el][nvm.el]], but I also see [[https://github.com/jimeh/.emacs.d/blob/master/env.el][hardcoded paths in Emacs configs]]. =nvm.el= does /not/ seem to touch =exec-path= it only sets environment variables. I guess this is useful for launching shells in subprocesses (e.g. =eshell=), but it doesn't really help in the case of things like =executable-find=.
+
+What do I really want this to do?
+
+1. Subprocesses should find executables in the =nvm= path. I should be able to (e.g.) run =grunt= and not need to installed it to =/usr/local/bin=.
+2. Flycheck should find =jshint= in the =nvm= path.
+
+The main things here that I care about are running =grunt= and =jshint= (via Flycheck) from within Emacs.
+
 ** TODO powerline
 
 powerline: https://github.com/milkypostman/powerline
