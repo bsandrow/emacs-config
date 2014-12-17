@@ -661,6 +661,8 @@ tend to get in the way.
   ;(setq-default truncate-lines t)
 #+end_src
 
+** Frame Defaults
+
 Let's also make the initial window ("frame") a little bigger:
 
 #+begin_src emacs-lisp
