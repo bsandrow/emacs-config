@@ -96,7 +96,7 @@ http://stackoverflow.com/questions/554949/let-versus-let-in-common-lisp
 =a > b ? a : b= becomes:
 
 #+begin_src emacs-lisp
-(if (> a b) a b)
+;(if (> a b) a b)
 #+end_src
 
 * Support Code
@@ -1054,6 +1054,7 @@ See [[file:org.org][init-org.el]] for details on my [[http://orgmode.org][Org-Mo
 #+begin_src emacs-lisp
 (org-babel-load-file (expand-file-name "org.org" dotfiles-dir))
 #+end_src
+
 ** Pomodoro
 
 An [[https://github.com/baudtack/pomodoro.el/blob/master/pomodoro.el][Emacs mode]] for using the [[http://pomodorotechnique.com/][Pomodoro technique]].
@@ -1075,9 +1076,9 @@ Defer loading of =pomodoro= until =pomodoro-start= is called.
 #+end_src
 
 *Sources*:
-- https://github.com/rodw/.dotfiles/blob/master/emacs/.rods-dot-emacs.org#pomodoro
-- http://ivan.kanis.fr/pomodoro.el
-- https://github.com/baudtack/pomodoro.el/blob/master/pomodoro.el
+- [[https://github.com/rodw/.dotfiles/blob/master/emacs/.rods-dot-emacs.org#pomodoro][Where I stumbled across reference to pomodoro.el]]
+- [[http://ivan.kanis.fr/pomodoro.el][The original (?) pomodoro.el]]
+- [[https://github.com/baudtack/pomodoro.el/blob/master/pomodoro.el][This is the pomodoro.el that I'm currently using]]
 
 * Evil Mode
 
@@ -1121,7 +1122,7 @@ Emulate Vim's =:set wrap= and =:set nowrap=:
 
 #+begin_src emacs-lisp
 ;; Quickly enable/disable line wrapping
-(evil-ex-define-cmd "wrap" (lambda () (setq truncate-lines nil)))
+(evil-ex-define-cmd "wrap" 'my-wrap-lines)
 (evil-ex-define-cmd "nowrap" (lambda () (setq truncate-lines t)))
 #+end_src
 
@@ -1617,6 +1618,7 @@ source (someone's =.emacs.d= on [[https://github.com][Github]]).
 #+end_src
 
 * The /FUTURE/
+** TODO Why aren't Evil Ex commands working
 ** TODO Convert over to =after= macro
 
 Go through everything and convert it over to using the =after= macro instead of
@@ -1686,6 +1688,15 @@ Resources:
 ** TODO evil-tabs + elscreen
 
 https://github.com/krisajenkins/evil-tabs
+
+** DONE ido-vertical-mode scrolling
+
+Looks like there is no 'easy' way to do this. ido-vertical-mode is a
+thin wrapper around ido-mode that changes the display template to
+includes things like newlines. There is no quick/easy way to do what I
+want to do here.
+
+I looked through the package source, and this is what I found.
 
 * Misc. Sources
 
