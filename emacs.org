@@ -1511,7 +1511,8 @@ Note:
                 (setq-default js2-auto-indent-p t))
     :config
     (progn
-      (add-hook 'js2-mode-hook 'my-nodejs-modules-check)
+      (add-hook 'js2-mode-hook 'bs/nodejs-modules-check)
+      (add-hook 'js2-mode-hook 'bs/turn-on-flycheck-mode-js2)
 
       ;; Replace 'function' with 'ƒ'
       (font-lock-add-keywords
@@ -1535,6 +1536,14 @@ Configure indentation controls:
   (setq-default js2-enter-indents-newline t)
   (setq-default js2-indent-on-enter-key t)
   ;(setq-default js2-mode-indent-ignore-first-tab t)
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun bs/turn-on-flycheck-mode-js2 ()
+    "Turn on and define JS2 mode checker"
+    (flycheck-select-checker 'javascript-jslist-reporter)
+    ;(flycheck-select-checker 'javascript-jshint-reporter)
+    (flycheck-mode 1))
 #+end_src
 
 Clean up whitespace sometimes:
@@ -1563,7 +1572,7 @@ Control over errors:
 Node.js local modules
 
 #+begin_src emacs-lisp
-  (defun my-nodejs-modules-check ()
+  (defun bs/nodejs-modules-check ()
     "Add local node_modules directory to $PATH & exec-path"
     (if (projectile-project-p)
         (let ((node-modules (expand-file-name
