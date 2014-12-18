@@ -1494,6 +1494,24 @@ activate. We can fix that though. We have the technology...
 *TODO* Getting VirtualENVs setup if in the correct directory.
 *TODO* Get virstualenvs and flycheck-mode working.
 
+** SASS
+
+Use =scss-mode= ([[https://github.com/antonj/scss-mode/][Github]], [[http://www.emacswiki.org/ScssMode][EmacsWiki]]) to handle [[http://sass-lang.com/][Sass]] files. I've turned
+off =scss-compile-at-save= because I don't want to compile every time
+that I save (especially since it's not using the build processes that
+I usually use).
+
+#+begin_src emacs-lisp
+  (use-package scss-mode
+    :ensure scss-mode
+    :defer 1
+    :commands scss-mode
+    :mode ("\\.scss\\'" . scss-mode)
+    :config
+    (progn
+      (setq scss-compile-at-save nil)))
+#+end_src
+
 ** JavaScript
 
 Use =js2-mode= for JavaScript. (Note: I should probably break this up
