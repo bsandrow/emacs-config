@@ -1441,7 +1441,12 @@ Configure =evil-mode= and =org-mode= to work together:
 #+begin_src emacs-lisp
   (use-package flycheck
     :ensure flycheck
-    :config (add-hook 'prog-mode-hook 'flycheck-mode))
+    :config
+    (progn
+      (add-hook 'python-mode-hook 'flycheck-mode)
+      (add-hook 'scss-mode-hook 'flycheck-mode)
+      (add-hook 'emacs-lisp-mode-hook 'flycheck-mode)
+      (add-hook 'js2-mode 'flycheck-mode)))
 #+end_src
 
 ** Python
