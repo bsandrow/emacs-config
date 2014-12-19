@@ -1153,6 +1153,16 @@ Make sure that =evil-mode= is installed and enabled.
       (evil-mode 1)))
 #+end_src
 
+** evil-surround
+
+[[https://github.com/timcharper/evil-surround][evil-surround]] emulates [[https://github.com/tpope/vim-surround][Tim Pope's vim-surround]].
+
+#+begin_src emacs-lisp
+  (use-package evil-surround
+    :ensure evil-surround
+    :config (global-evil-surround-mode 1))
+#+end_src
+
 ** Evil Ex Commands
 
 Emulate Vim's =:sort= command:
