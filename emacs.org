@@ -842,26 +842,16 @@ depth with different colors. So far I find this useful in Emacs Lisp.
 Install / Configure color themes. :)
 
 #+begin_src emacs-lisp
-(packages-install '(solarized-theme
-                    base16-theme))
+  (packages-install '(solarized-theme
+                      base16-theme))
 
-(defun my-add-theme-load-path (path)
-  "Add a path to the custom-theme-load-path list."
-  (add-to-list 'custom-theme-load-path (file-name-as-directory path)))
+  (add-to-list 'custom-theme-load-path (expand-file-name "themes" dotfiles-dir))
 
-(defun my-add-vendor-theme (name)
-  "Add a theme path under the vendor/ directory to custom-theme-load-path."
-  (my-add-theme-load-path (expand-file-name name vendor-dir)))
-
-(mapc 'my-add-vendor-theme
-      '("color-theme-ports"
-        "base16-themes"
-        "emacs-spacegray-theme"))
-
-;(load-theme 'base16-ocean-dark t)
-;(load-theme 'base16-flat-dark t)
-;(load-theme 'spacegray t)
-(load-theme 'solarized-dark t)
+  ;(load-theme 'base16-ocean-dark t)
+  ;(load-theme 'base16-flat-dark t)
+  ;(load-theme 'spacegray t)
+  (load-theme 'solarized-dark t)
+  (load-theme 'solarized-light t)
 #+end_src
 
 *Resources:*
