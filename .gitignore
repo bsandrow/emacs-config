@@ -1,17 +1,25 @@
+# Emacs swap / backup/ etc. files
 *~
-elpa/archives/*
-ido.last
-eshell/
-*.elc
-.projectile
-history
-savehist
-recentf
-projectile.cache
-projectile-bookmarks.eld
-saveplace
 \#*#
 .#*
+
+# byte-compiled elisp files
+*.elc
+
+# generated files (from .org files)
 org.el
 emacs.html
 emacs.el
+
+# projectile-mode files
+projectile.cache
+projectile-bookmarks.eld
+
+# Misc. local Emacs files (files only pertinent to the local instance
+# of Emacs)
+ido.last
+eshell/
+history
+savehist
+recentf
+saveplace
