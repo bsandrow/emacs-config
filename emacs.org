@@ -1131,7 +1131,7 @@ Make Emacs a little more *evil*...
 #+end_src
 
 ** Initialize
-   
+
 Make sure that =evil-mode= is installed and enabled.
 
 #+begin_src emacs-lisp
