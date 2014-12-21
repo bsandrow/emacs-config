@@ -331,8 +331,8 @@ Use =savehist-mode= to store the minibuffer history. I picked up
 configuration settings from [[https://github.com/sachac/.emacs.d/blob/gh-pages/Sacha.org#history][here]].
 
 #+begin_src emacs-lisp
-  (packages-install '(savehist))
   (use-package savehist
+    :ensure savehist
     :init
     (progn
       (setq savehist-file (expand-file-name "savehist" dotfiles-dir))
