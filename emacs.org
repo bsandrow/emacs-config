@@ -1609,21 +1609,24 @@ Clean up whitespace sometimes:
   (setq-default js2-cleanup-whitespace t)
 #+end_src
 
-Control over errors:
+Turn off warnings / errors. We're using =flycheck= to handle these, so
+no sense having =js2-mode= / =flycheck= tripping over each other.
 
 #+begin_src emacs-lisp
+  (setq-default js2-mode-show-parse-errors nil)
+  (setq-default js2-mode-show-string-warnings nil)
+#+end_src
 
-  ;; Let flymake do the error-parsing
-  (setq-default js2-show-parse-errors nil)
+If we ever enable warnings / errors, use this list of symbols to
+exclude from the "not defined" warning (e.g. because they are defined
+by the browser).
 
+#+begin_src emacs-lisp
   (setq-default js2-global-externs
                 '("assert" "refute" "setTimeout" "clearTimeout"
                   "setInterval" "clearInterval" "console" "JSON"
                   "jQuery" "$" "angular" "Ember" "module" "require"
                   "process"))
-
-  ;; TODO What does this do:
-  (setq js2-mode-toggle-warnings-and-errors t)
 #+end_src
 
 Node.js local modules
@@ -1869,12 +1872,6 @@ you get so many scroll events even for short moves.
         Stefan
 #+end_quote
 
-** TODO Figure out what this does:
-
-#+begin_example
-  (setq js2-mode-toggle-warnings-and-errors t)
-#+end_example
-
 ** TODO nvm + Emacs
 
 Looks like there is [[https://github.com/rejeep/nvm.el][nvm.el]], but I also see [[https://github.com/jimeh/.emacs.d/blob/master/env.el][hardcoded paths in Emacs
@@ -1900,6 +1897,10 @@ The lack of =exec-path= handling in =nvm.el= puts it at odds with
 [[http://stackoverflow.com/questions/16786831/how-can-i-set-environment-variables-to-a-buffer-local-scope-in-emacs][Making environment variables buffer-local]]:
 
 You can do this by making =process-environment= buffer-local:
+
+--
+
+http://www.tallent.org/2013/12/run-grunt-in-emacs/
 
 #+begin_src emacs-lisp :tangle no
 (defun setup-some-mode-env ()
@@ -1979,6 +1980,36 @@ https://github.com/krisajenkins/evil-tabs
 ** TODO Read up on Cask
 
 https://github.com/cask/cask
+
+** DONE Figure out what this does:
+
+#+begin_example
+  (setq js2-mode-toggle-warnings-and-errors t)
+#+end_example
+
+This is not actually a variable, but a function that toggles the two
+variables that control warnings and errors:
+- =js2-mode-show-parse-errors=
+- =js2-mode-show-strict-warnings=
+
+I'm pretty sure that this line of code was grabbed from someone's
+Emacs config, but it doesn't look like something that is valid. Here
+of the function definition (grabbed from [[https://github.com/mooz/js2-mode/blob/master/js2-mode.el][github.com]]):
+
+#+begin_src emacs-lisp :tangle no
+  (defun js2-mode-toggle-warnings-and-errors ()
+    "Toggle the display of warnings and errors.
+  Some users don't like having warnings/errors reported while they type."
+    (interactive)
+    (setq js2-mode-show-parse-errors (not js2-mode-show-parse-errors)
+          js2-mode-show-strict-warnings (not js2-mode-show-strict-warnings))
+    (if (called-interactively-p 'any)
+        (message "warnings and errors %s"
+                 (if js2-mode-show-parse-errors
+                     "enabled"
+                   "disabled")))
+    (js2-reparse 'force))
+#+end_src
 
 ** DONE Fix powerline Separator Weirdness
 
