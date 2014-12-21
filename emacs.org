@@ -224,7 +224,7 @@ store the changes in this file:
 Create =~/.emacs.d= subdirectories (if they don't exist):
 
 #+begin_src emacs-lisp
-(let* ((subdirs '("elisp" "backups" "snippets" "vendor"))
+(let* ((subdirs '("elisp" "backups" "snippets" "themes"))
        (fulldirs (mapcar (lambda (d) (expand-file-name d dotfiles-dir)) subdirs)))
   (dolist (dir fulldirs)
     (when (not (file-exists-p dir))
@@ -232,11 +232,11 @@ Create =~/.emacs.d= subdirectories (if they don't exist):
       (make-directory dir))))
 #+end_src
 
-The =~/.emacs.d/vendor= directory is where I put all of my 3rd-party
+The =~/.emacs.d/elisp= directory is where I put all of my 3rd-party
 elisp packages that I don't install from ELPA.
 
 #+begin_src emacs-lisp
-(setq vendor-dir (expand-file-name "vendor" dotfiles-dir))
+(setq vendor-dir (expand-file-name "elisp" dotfiles-dir))
 (add-to-list 'load-path vendor-dir)
 #+end_src
 
