@@ -12,3 +12,6 @@ projectile-bookmarks.eld
 saveplace
 \#*#
 .#*
+org.el
+emacs.html
+emacs.el
