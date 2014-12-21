@@ -628,16 +628,47 @@ not sure if this would affect both of them, or just one of them.
 A number of the default settings should just be disabled as they
 tend to get in the way.
 
+** Startup
+
+Disable a bunch of startup junk, like the "Welcome Message", which we
+really don't care about.
+
 #+begin_src emacs-lisp
   (setq inhibit-startup-message t)
   (setq initial-scratch-message nil)
-  (setq visible-bell t)
+#+end_src
 
+** Bell
+
+We don't want audible bells dinging all of the time. Let's use the
+visual bell (a white square the momentarily pops up in the middle of
+the Emacs window).
+
+#+begin_src emacs-lisp
+  (setq visible-bell t)
+#+end_src
+
+** Window Options
+
+If we're in the console, we don't need the menu system. If we're in
+the GUI, it could be useful so we'll keep it.
+
+Note: It doesn't take up extra space on OSX to include the menu (since
+there is always a menubar at the top of the screen), but disabling
+this may get more vertical screen real estate on other systems
+(e.g. Windows or Linux).
+
+#+begin_src emacs-lisp
   ;; Disable the menu if we're on the console.
   (unless (window-system)
     (when (fboundp 'menu-bar-mode)
       (menu-bar-mode -1)))
+#+end_src
 
+Turn off all of the other stuff though. We don't need scrollbars or
+toolbars cluttering up our display as we won't be using them anyways.
+
+#+begin_src emacs-lisp
   ;; When we're in GUI mode, disable toolbars and scrollbars.
   (when (window-system)
     (when (fboundp 'tool-bar-mode)
@@ -648,17 +679,28 @@ tend to get in the way.
 
     (when (fboundp 'scroll-bar-mode)
       (scroll-bar-mode -1)))
+#+end_src
 
-  ;; Make sure that everyone reading the window title knows: THIS! IS! EMACS!
+Reformat the title format. Let's make sure that window titles announce
+that THIS! IS! EMACS!
+
+#+begin_src emacs-lisp
   (setq frame-title-format "%b - Emacs")
   (setq icon-title-format "%b - Emacs")
+#+end_src
 
-  ;; Don't pull up a GUI-native file selector. Use the minibuffer. Ths
-  ;; only way that FSM intended.
+I don't want a GUI file dialog popping up when trying to open a
+file. Just use the normal methods (=find-file=, =ido-find-file=, etc)
+the way that [[http://www.venganza.org/][FSM]] intended things to be.
+
+#+begin_src emacs-lisp
   (setq use-file-dialog nil)
+#+end_src
 
-  ;; Default to 'truncating' display of long lines rather than
-  ;; wrapping them.
+Turn off line-wrapping by default? Not today! Comment that +shi+
+garbage out!
+
+#+begin_src
   ;(setq-default truncate-lines t)
 #+end_src
 
