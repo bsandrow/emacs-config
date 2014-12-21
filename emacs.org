@@ -1215,10 +1215,21 @@ Emulate Vim's =:sort= command:
 Emulate Vim's =:set wrap= and =:set nowrap=:
 
 #+begin_src emacs-lisp
-;; Quickly enable/disable line wrapping
-(evil-ex-define-cmd "wrap" 'my-wrap-lines)
-(evil-ex-define-cmd "nowrap" (lambda () (setq truncate-lines t)))
+  (defun bjs/evil-ex-wrap ()
+    (interactive)
+    (message "Turning truncate-lines on.")
+    (setq truncate-lines t))
+
+  (defun bjs/evil-ex-nowrap ()
+    (interactive)
+    (message "Turning truncate-line off.")
+    (setq truncate-lines nil))
+
+  ;; Quickly enable/disable line wrapping
+  (evil-ex-define-cmd "wrap" 'bjs/evil-ex-wrap)
+  (evil-ex-define-cmd "nowrap" 'bjs/evil-ex-nowrap)
 #+end_src
+
 
 ** Evil Leader Configuration
 
@@ -1793,7 +1804,6 @@ find-file?
 
 There is [[http://solovyov.net/project-root/][project-root.el]] that looks fairly simple...
 
-** TODO Why aren't Evil Ex commands working
 ** TODO Tweak scroll accelerate settings
 
  Tweak the scroll accelerate setting. I think that I want to
@@ -1983,6 +1993,17 @@ https://github.com/krisajenkins/evil-tabs
 ** TODO Read up on Cask
 
 https://github.com/cask/cask
+
+** DONE Why aren't Evil Ex commands working
+
+It wasn't working because the newer =evil-ex-binding= implementation
+will fail if the functions I bind are not interactive. After much
+thrashing on figuring out what was going on, I found [[https://gitorious.org/evil/evil/source/8c6d07394107f5236092d49c187bcfce78966aa5:evil-ex.el#L31][this]]:
+
+  Ex commands are defined with =evil-ex-define-cmd=, which creates a
+  binding from a string to an interactive function."
+
+Fixing my functions to add =(interactive)= fixed this right up.
 
 * Misc. Sources
 
