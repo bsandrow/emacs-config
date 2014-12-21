@@ -896,8 +896,7 @@ depth with different colors. So far I find this useful in Emacs Lisp.
 Install / Configure color themes. :)
 
 #+begin_src emacs-lisp
-  (packages-install '(solarized-theme
-                      base16-theme))
+  (packages-install '(solarized-theme base16-theme))
 
   (add-to-list 'custom-theme-load-path (expand-file-name "themes" dotfiles-dir))
 
@@ -923,7 +922,7 @@ Install / Configure color themes. :)
 #+end_src
 
 * Navigation
-** ibuffer-mode
+** Ibuffer Mode
 
 =ibuffer-mode= presents a list of all open buffers in Emacs with an
 interface to manage those buffers (remove them, group them, switch to
@@ -931,10 +930,6 @@ them, etc). It's somewhat analogous to BufferExplorer in Vim, though I
 feel like =ibuffer-mode= has more functionality.
 
 #+begin_src emacs-lisp
-  ;; Note: I'm not sure how packages-install and use-package will
-  ;; interact. packages-install doesn't do anything if the packages
-  ;; are already installed, but if it needs to install them, it also
-  ;; loads them IIRC. I'm not sure how use-package will handle that.
   (defun my-ibuffer-vc-hook ()
     "Use ibuffer-vc to group by project root."
     (ibuffer-vc-set-filter-groups-by-vc-root)
