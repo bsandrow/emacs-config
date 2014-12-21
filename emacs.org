@@ -884,8 +884,8 @@ up. Not rocket science... :)
 depth with different colors. So far I find this useful in Emacs Lisp.
 
 #+begin_src emacs-lisp
-  (packages-install '(rainbow-delimiters))
   (use-package rainbow-delimiters
+    :ensure rainbow-delimiters
     :commands rainbow-delimiters-mode
     :init (progn
             (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)))
