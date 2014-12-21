@@ -603,6 +603,18 @@ not sure if this would affect both of them, or just one of them.
 (setq require-final-newline t)
 #+end_src
 
+** Electric Indent Mode
+
+This mode (=electric-indent-mode=) is enabled by default in Emacs
+24.4, but according to this [[http://emacsredux.com/blog/2014/01/19/a-peek-at-emacs-24-dot-4-auto-indentation-by-default/][article]], it doesn't play nice with some
+other modes (it mentions =yaml-mode= and =slim-mode= specifically), so
+let's pre-emptively disable it in these modes:
+
+#+begin_src emacs-lisp
+  (add-hook 'yaml-mode-hook (lambda () (electric-indent-local-mode -1)))
+  (add-hook 'slim-mode-hook (lambda () (electric-indent-local-mode -1)))
+#+end_src
+
 ** Encoding
 
 #+begin_src emacs-lisp
@@ -1786,10 +1798,6 @@ find-file?
 
 There is [[http://solovyov.net/project-root/][project-root.el]] that looks fairly simple...
 
-** TODO electric-indent-mode?
-
-http://emacsredux.com/blog/2014/01/19/a-peek-at-emacs-24-dot-4-auto-indentation-by-default/
-
 ** TODO Why aren't Evil Ex commands working
 ** TODO Tweak scroll accelerate settings
 
@@ -2028,6 +2036,10 @@ includes things like newlines. There is no quick/easy way to do what I
 want to do here.
 
 I looked through the package source, and this is what I found.
+
+** DONE electric-indent-mode?
+
+http://emacsredux.com/blog/2014/01/19/a-peek-at-emacs-24-dot-4-auto-indentation-by-default/
 
 * Misc. Sources
 
