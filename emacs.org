@@ -1989,58 +1989,6 @@ https://github.com/krisajenkins/evil-tabs
 
 https://github.com/cask/cask
 
-** DONE Figure out what this does:
-
-#+begin_example
-  (setq js2-mode-toggle-warnings-and-errors t)
-#+end_example
-
-This is not actually a variable, but a function that toggles the two
-variables that control warnings and errors:
-- =js2-mode-show-parse-errors=
-- =js2-mode-show-strict-warnings=
-
-I'm pretty sure that this line of code was grabbed from someone's
-Emacs config, but it doesn't look like something that is valid. Here
-of the function definition (grabbed from [[https://github.com/mooz/js2-mode/blob/master/js2-mode.el][github.com]]):
-
-#+begin_src emacs-lisp :tangle no
-  (defun js2-mode-toggle-warnings-and-errors ()
-    "Toggle the display of warnings and errors.
-  Some users don't like having warnings/errors reported while they type."
-    (interactive)
-    (setq js2-mode-show-parse-errors (not js2-mode-show-parse-errors)
-          js2-mode-show-strict-warnings (not js2-mode-show-strict-warnings))
-    (if (called-interactively-p 'any)
-        (message "warnings and errors %s"
-                 (if js2-mode-show-parse-errors
-                     "enabled"
-                   "disabled")))
-    (js2-reparse 'force))
-#+end_src
-
-** DONE Fix powerline Separator Weirdness
-
-[[http://emacsredux.com/blog/2014/01/11/a-peek-at-emacs-24-dot-4-srgb-colours-on-os-x/][this]] seems to solve it. It has something to
-do with sRGB colourspace.
-
-** DONE Convert over to =after= macro
-
-Go through everything and convert it over to using the =after= macro.
-
-** DONE ido-vertical-mode scrolling
-
-Looks like there is no 'easy' way to do this. ido-vertical-mode is a
-thin wrapper around ido-mode that changes the display template to
-includes things like newlines. There is no quick/easy way to do what I
-want to do here.
-
-I looked through the package source, and this is what I found.
-
-** DONE electric-indent-mode?
-
-http://emacsredux.com/blog/2014/01/19/a-peek-at-emacs-24-dot-4-auto-indentation-by-default/
-
 * Misc. Sources
 
 Some sources of config/inspiration that I've tapped in the past:
