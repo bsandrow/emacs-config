@@ -1264,6 +1264,7 @@ all buffers is missing.
 *NOTE*: Using =ibuffer-mode= instead.
 
 #+begin_src emacs-lisp
+  (evil-leader/set-key "bs" 'ido-switch-buffer)
   (evil-leader/set-key "be" 'ibuffer)
 #+end_src
 
