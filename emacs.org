@@ -1811,87 +1811,6 @@ find-file?
 
 There is [[http://solovyov.net/project-root/][project-root.el]] that looks fairly simple...
 
-** TODO Tweak scroll accelerate settings
-
- Tweak the scroll accelerate setting. I think that I want to
- accelerate scrolling, but before it was /way/ too sensitive.
-
-SOURCE: http://stackoverflow.com/questions/8967919/how-to-define-faster-scrolling-than-triple-wheel-down-in-emacs
-
-#+begin_quote
-It seems as if Emacs does not handle scroll events like OSX does. The
-double- and triple- modifiers and the event-click-count function
-Stefan mentioned do not signify single events of fast scrolling but
-merely that several scroll events happend in close succession. So when
-you begin to scroll, you get a 'click count' of 1, then 2, then 3 and
-so on.
-
-On OSX, the trackpad does not issue individual scroll events like a
-mouse-wheel does. Instead, each event contains a pixel increment of
-how far the cursor moved since the last event. Programs should move
-their scroll-views by a distance proportional to that
-increment. However, to my knowledge Emacs scroll events do not contain
-that increment. Therefore, Emacs in its current form can not implement
-inertial scrolling.
-
-PLEASE correct me if I'm wrong!
-#+end_quote
-
-SOURCE: https://lists.gnu.org/archive/html/emacs-devel/2014-01/msg01972.html
-
-#+begin_quote
-For what it's worth, I was suffering from exactly the same thing and
-eventually unbound the mwheel stuff altogether and simply rebound them
-to the following. After that, scrolling was sane again.
-
-(defun scroll-up-one ()
-  (interactive)
-  (scroll-up 1))
-
-(defun scroll-down-one ()
-  (interactive)
-  (scroll-down 1))
-
-(defun scroll-up-double-speed ()
-  (interactive)
-  (scroll-up 3))
-
-(defun scroll-down-double-speed ()
-  (interactive)
-  (scroll-down 3))
-
-(global-set-key (kbd "<mouse-4>") 'scroll-down-one)
-(global-set-key (kbd "<mouse-5>") 'scroll-up-one)
-(global-set-key (kbd "<double-mouse-4>") 'scroll-down-double-speed)
-(global-set-key (kbd "<double-mouse-5>") 'scroll-up-double-speed)
-(global-set-key (kbd "<wheel-up>") 'scroll-down-one)
-(global-set-key (kbd "<wheel-down>") 'scroll-up-one)
-(global-set-key (kbd "<double-wheel-up>") 'scroll-down-double-speed)
-(global-set-key (kbd "<double-wheel-down>") 'scroll-up-double-speed)
-
-Regards,
-Elias
-#+end_quote
-
-QUOTE: https://lists.gnu.org/archive/html/emacs-devel/2014-01/msg01986.html
-
-#+begin_quote
-> For what it's worth, I was suffering from exactly the same thing and
-> eventually unbound the mwheel stuff altogether and simply rebound them to
-> the following. After that, scrolling was sane again.
-
-You can probably get the same kind of result by tweaking
-mouse-wheel-scroll-amount as in:
-
-  (setf (car mouse-wheel-scroll-amount) 1)
-
-But this "shouldn't" be needed.  IOW we should try and figure out why
-you get so many scroll events even for short moves.
-
-
-        Stefan
-#+end_quote
-
 ** TODO nvm + Emacs
 
 Looks like there is [[https://github.com/rejeep/nvm.el][nvm.el]], but I also see [[https://github.com/jimeh/.emacs.d/blob/master/env.el][hardcoded paths in Emacs
@@ -2000,6 +1919,90 @@ https://github.com/krisajenkins/evil-tabs
 ** TODO Read up on Cask
 
 https://github.com/cask/cask
+
+** DONE Tweak scroll accelerate settings
+
+NOTE: This isn't really 'done' so much as there isn't much that can be
+      done about it currently.
+
+ Tweak the scroll accelerate setting. I think that I want to
+ accelerate scrolling, but before it was /way/ too sensitive.
+
+SOURCE: http://stackoverflow.com/questions/8967919/how-to-define-faster-scrolling-than-triple-wheel-down-in-emacs
+
+#+begin_quote
+It seems as if Emacs does not handle scroll events like OSX does. The
+double- and triple- modifiers and the event-click-count function
+Stefan mentioned do not signify single events of fast scrolling but
+merely that several scroll events happend in close succession. So when
+you begin to scroll, you get a 'click count' of 1, then 2, then 3 and
+so on.
+
+On OSX, the trackpad does not issue individual scroll events like a
+mouse-wheel does. Instead, each event contains a pixel increment of
+how far the cursor moved since the last event. Programs should move
+their scroll-views by a distance proportional to that
+increment. However, to my knowledge Emacs scroll events do not contain
+that increment. Therefore, Emacs in its current form can not implement
+inertial scrolling.
+
+PLEASE correct me if I'm wrong!
+#+end_quote
+
+SOURCE: https://lists.gnu.org/archive/html/emacs-devel/2014-01/msg01972.html
+
+#+begin_quote
+For what it's worth, I was suffering from exactly the same thing and
+eventually unbound the mwheel stuff altogether and simply rebound them
+to the following. After that, scrolling was sane again.
+
+(defun scroll-up-one ()
+  (interactive)
+  (scroll-up 1))
+
+(defun scroll-down-one ()
+  (interactive)
+  (scroll-down 1))
+
+(defun scroll-up-double-speed ()
+  (interactive)
+  (scroll-up 3))
+
+(defun scroll-down-double-speed ()
+  (interactive)
+  (scroll-down 3))
+
+(global-set-key (kbd "<mouse-4>") 'scroll-down-one)
+(global-set-key (kbd "<mouse-5>") 'scroll-up-one)
+(global-set-key (kbd "<double-mouse-4>") 'scroll-down-double-speed)
+(global-set-key (kbd "<double-mouse-5>") 'scroll-up-double-speed)
+(global-set-key (kbd "<wheel-up>") 'scroll-down-one)
+(global-set-key (kbd "<wheel-down>") 'scroll-up-one)
+(global-set-key (kbd "<double-wheel-up>") 'scroll-down-double-speed)
+(global-set-key (kbd "<double-wheel-down>") 'scroll-up-double-speed)
+
+Regards,
+Elias
+#+end_quote
+
+QUOTE: https://lists.gnu.org/archive/html/emacs-devel/2014-01/msg01986.html
+
+#+begin_quote
+> For what it's worth, I was suffering from exactly the same thing and
+> eventually unbound the mwheel stuff altogether and simply rebound them to
+> the following. After that, scrolling was sane again.
+
+You can probably get the same kind of result by tweaking
+mouse-wheel-scroll-amount as in:
+
+  (setf (car mouse-wheel-scroll-amount) 1)
+
+But this "shouldn't" be needed.  IOW we should try and figure out why
+you get so many scroll events even for short moves.
+
+
+        Stefan
+#+end_quote
 
 ** DONE Why aren't Evil Ex commands working
 
