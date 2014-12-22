@@ -1218,12 +1218,12 @@ Emulate Vim's =:set wrap= and =:set nowrap=:
   (defun bjs/evil-ex-wrap ()
     (interactive)
     (message "Turning truncate-lines on.")
-    (setq truncate-lines t))
+    (setq truncate-lines nil))
 
   (defun bjs/evil-ex-nowrap ()
     (interactive)
     (message "Turning truncate-line off.")
-    (setq truncate-lines nil))
+    (setq truncate-lines t))
 
   ;; Quickly enable/disable line wrapping
   (evil-ex-define-cmd "wrap" 'bjs/evil-ex-wrap)
