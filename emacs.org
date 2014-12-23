@@ -1288,7 +1288,7 @@ Frank
 There are some things from Vim that =evil-mode= is still missing.
 
 *** Edit Alternate File
-    
+
 Vim has a binding (=C-6=) that is used to switch to an alternate
 buffer (most of the time this is just 'previous buffer'). From the Vim
 helpdocs:
@@ -1384,7 +1384,7 @@ From the Vim docs:
 			a pattern first.
 
 Note that using `:sort` with `:global` doesn't sort the matching lines, it's
-quite useless.                                                  
+quite useless.
 #+end_quote
 
 This won't be a full implementation, but let's bind =sort-lines= to
@@ -1591,7 +1591,7 @@ modes that either don't work by default, or that I need to manually
 configure to my liking.
 
 *** ibuffer-mode
-    
+
 Integrate =ibuffer-mode= with =evil-mode=.
 
 #+begin_src emacs-lisp
@@ -1618,7 +1618,7 @@ Integrate =ibuffer-mode= with =evil-mode=.
 #+end_src
 
 *** org-mode
-    
+
 Integrate =evil-mode= into =org-mode=.
 
 #+begin_src emacs-lisp
@@ -1761,6 +1761,12 @@ Use =scss-mode= ([[https://github.com/antonj/scss-mode/][Github]], [[http://www.
 off =scss-compile-at-save= because I don't want to compile every time
 that I save (especially since it's not using the build processes that
 I usually use).
+
+=scss-compile-at-save= makes more sense to me as part of a
+=scss-mode-hook= that tries to determine the build process for a
+source file, then locally (per-buffer) configures the build command,
+and turns on =scss-compile-at-save=. I feel like turning this feature
+on by default is a dubious design choice.
 
 #+begin_src emacs-lisp
   (use-package scss-mode
@@ -1907,10 +1913,14 @@ Use =markdown-mode= to edit Markdown files.
            ;("\\.text\\'" . markdown-mode)
            ("\\.md\\'" . markdown-mode)))
 #+end_src
-* Work Stuff
+* Employer Stuff
+
+Section for employer-specific stuff.
+
+** Sowingo
 
 #+begin_src emacs-lisp
-  (defun sowingo-js2-setup ()
+  (defun sowingo/js2-mode-setup ()
     "Setup js2-mode for Sowingo projects."
     (when (and (projectile-project-p)
                (string/starts-with (expand-file-name (projectile-project-root))
