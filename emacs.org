@@ -1791,13 +1791,12 @@ Note:
   (use-package js2-mode
     :defer 1
     :mode ("\\.js\\'" . js2-mode)
-    :pre-load (progn
-                (setq-default js2-auto-indent-p t))
+    :pre-load (setq-default js2-auto-indent-p t)
     :config
     (progn
-      (add-hook 'js2-mode-hook 'bs/js2-process-environment)
-      ;; (add-hook 'js2-mode-hook 'bs/nodejs-modules-check)
-      (add-hook 'js2-mode-hook 'bs/turn-on-flycheck-mode-js2)
+      (add-hook 'js2-mode-hook 'bjs/js2-process-environment)
+      ;; (add-hook 'js2-mode-hook 'bjs/nodejs-modules-check)
+      (add-hook 'js2-mode-hook 'bjs/turn-on-flycheck-mode-js2)
 
       ;; Replace 'function' with 'ƒ'
       (font-lock-add-keywords
@@ -1852,7 +1851,7 @@ by the browser).
 Node.js local modules
 
 #+begin_src emacs-lisp
-  ;; (defun bs/nodejs-modules-check ()
+  ;; (defun bjs/nodejs-modules-check ()
   ;;   "Add local node_modules directory to $PATH & exec-path"
   ;;   (if (projectile-project-p)
   ;;       (let ((node-modules (expand-file-name
@@ -1872,14 +1871,14 @@ Node.js local modules
 *** Local process-environment
 
 #+begin_src emacs-lisp
-  (defun bs/js2-process-environment ()
+  (defun bjs/js2-process-environment ()
     (make-local-variable 'process-environment))
 #+end_src
 
 *** js2-mode + flycheck-mode
 
 #+begin_src emacs-lisp
-  (defun bs/turn-on-flycheck-mode-js2 ()
+  (defun bjs/turn-on-flycheck-mode-js2 ()
     "Turn on and define JS2 mode checker"
     ;(flycheck-select-checker 'javascript-jslist-reporter)
     (flycheck-select-checker 'javascript-jshint)
