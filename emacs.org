@@ -1192,43 +1192,8 @@ Make sure that =evil-mode= is installed and enabled.
       (evil-mode 1)))
 #+end_src
 
-** evil-surround
-
-[[https://github.com/timcharper/evil-surround][evil-surround]] emulates [[https://github.com/tpope/vim-surround][Tim Pope's vim-surround]].
-
-#+begin_src emacs-lisp
-  (use-package evil-surround
-    :ensure evil-surround
-    :config (global-evil-surround-mode 1))
-#+end_src
-
-** Evil Ex Commands
-
-Emulate Vim's =:sort= command:
-
-#+begin_src emacs-lisp
-;; I'm used to using :sort all of the time in Vim, so let's alias
-;; :sort to :sort-lines for convenience. Huzzah!
-(evil-ex-define-cmd "sort" 'sort-lines)
-#+end_src
-
-Emulate Vim's =:set wrap= and =:set nowrap=:
-
-#+begin_src emacs-lisp
-  (defun bjs/evil-ex-wrap ()
-    (interactive)
-    (message "Turning truncate-lines on.")
-    (setq truncate-lines nil))
-
-  (defun bjs/evil-ex-nowrap ()
-    (interactive)
-    (message "Turning truncate-line off.")
-    (setq truncate-lines t))
-
-  ;; Quickly enable/disable line wrapping
-  (evil-ex-define-cmd "wrap" 'bjs/evil-ex-wrap)
-  (evil-ex-define-cmd "nowrap" 'bjs/evil-ex-nowrap)
-#+end_src
+** Information
+*** Ex Commands
 
 [[http://permalink.gmane.org/gmane.emacs.vim-emulation/1496][Some Explanation on Ex commands + args + completion]]:
 
@@ -1318,6 +1283,233 @@ don't hesitate to ask.
 Frank
 #+end_quote
 
+** Vim Fixes
+
+There are some things from Vim that =evil-mode= is still missing.
+
+*** Edit Alternate File
+    
+Vim has a binding (=C-6=) that is used to switch to an alternate
+buffer (most of the time this is just 'previous buffer'). From the Vim
+helpdocs:
+
+#+start_quote
+                                                 *CTRL-^* *CTRL-6*
+CTRL-^		Edit the alternate file.  Mostly the alternate file is
+			the previously edited file.  This is a quick way to
+			toggle between two files.  It is equivalent to ":e #",
+			except that it also works when there is no file name.
+
+			If the 'autowrite' or 'autowriteall' option is on and
+			the buffer was changed, write it.
+			Mostly the ^ character is positioned on the 6 key,
+			pressing CTRL and 6 then gets you what we call CTRL-^.
+			But on some non-US keyboards CTRL-^ is produced in
+			another way.
+#+end_quote
+
+=evil-mode= implements =C-^=, but it does /not/ implement =C-6=. I
+don't want to have to hit the SHIFT key if I don't have to, so let's
+implement this ourselves:
+
+#+begin_src emacs-lisp
+;; use C-6 to swap to a previous buffer
+(define-key evil-normal-state-map (kbd "C-6") 'evil-buffer)
+#+end_src
+
+*** Sort (Ex) Command
+
+From the Vim docs:
+
+#+begin_quote
+							*:sor* *:sort*
+:[range]sor[t][!] [i][u][r][n][x][o] [/{pattern}/]
+			Sort lines in [range].  When no range is given all
+			lines are sorted.
+
+			With [!] the order is reversed.
+
+			With [i] case is ignored.
+
+			With [n] sorting is done on the first decimal number
+			in the line (after or inside a {pattern} match).
+			One leading '-' is included in the number.
+
+			With [x] sorting is done on the first hexadecimal
+			number in the line (after or inside a {pattern}
+			match).  A leading "0x" or "0X" is ignored.
+			One leading '-' is included in the number.
+
+			With [o] sorting is done on the first octal number in
+			the line (after or inside a {pattern} match).
+
+			With [u] only keep the first of a sequence of
+			identical lines (ignoring case when [i] is used).
+			Without this flag, a sequence of identical lines
+			will be kept in their original order.
+			Note that leading and trailing white space may cause
+			lines to be different.
+
+			When /{pattern}/ is specified and there is no [r] flag
+			the text matched with {pattern} is skipped, so that
+			you sort on what comes after the match.
+			Instead of the slash any non-letter can be used.
+			For example, to sort on the second comma-separated
+			field: >
+				:sort /[^,]*,/
+<			To sort on the text at virtual column 10 (thus
+			ignoring the difference between tabs and spaces): >
+				:sort /.*\%10v/
+<			To sort on the first number in the line, no matter
+			what is in front of it: >
+				:sort /.\{-}\ze\d/
+<			(Explanation: ".\{-}" matches any text, "\ze" sets the
+			end of the match and \d matches a digit.)
+			With [r] sorting is done on the matching {pattern}
+			instead of skipping past it as described above.
+			For example, to sort on only the first three letters
+			of each line: >
+				:sort /\a\a\a/ r
+
+<			If a {pattern} is used, any lines which don't have a
+			match for {pattern} are kept in their current order,
+			but separate from the lines which do match {pattern}.
+			If you sorted in reverse, they will be in reverse
+			order after the sorted lines, otherwise they will be
+			in their original order, right before the sorted
+			lines.
+
+			If {pattern} is empty (e.g. // is specified), the
+			last search pattern is used.  This allows trying out
+			a pattern first.
+
+Note that using `:sort` with `:global` doesn't sort the matching lines, it's
+quite useless.                                                  
+#+end_quote
+
+This won't be a full implementation, but let's bind =sort-lines= to
+=:sort= to get the naive functionality of sorting a set of lines in
+the selected region:
+
+#+begin_src emacs-lisp
+(evil-ex-define-cmd "sort" 'sort-lines)
+#+end_src
+
+*** Toggle Line Wrapping
+
+Emulate Vim's =:set wrap= and =:set nowrap= (with =:wrap= and
+=:nowrap=, respectively):
+
+#+begin_src emacs-lisp
+  (defun bjs/evil-ex-wrap ()
+    (interactive)
+    (message "Turning truncate-lines on.")
+    (setq truncate-lines nil))
+
+  (defun bjs/evil-ex-nowrap ()
+    (interactive)
+    (message "Turning truncate-line off.")
+    (setq truncate-lines t))
+
+  ;; Quickly enable/disable line wrapping
+  (evil-ex-define-cmd "wrap" 'bjs/evil-ex-wrap)
+  (evil-ex-define-cmd "nowrap" 'bjs/evil-ex-nowrap)
+#+end_src
+
+*** Escape Key
+
+Make the =escape= key cancel all the things.
+
+([[https://github.com/davvil/.emacs.d/blob/64367f2/init.el#L19][Source]])
+
+#+begin_src emacs-lisp
+;;
+;; The Escape Key: Make it cancel everything...
+;;
+(defun minibuffer-keyboard-quit ()
+  "Abort recursive edit.
+In Delete Selection mode, if the mark is active, just deactivate it;
+then it takes a second \\[keyboard-quit] to abort the minibuffer."
+  (interactive)
+  (if (and delete-selection-mode transient-mark-mode mark-active)
+      (setq deactivate-mark  t)
+    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+    (abort-recursive-edit)))
+
+(define-key evil-normal-state-map [escape] 'keyboard-quit)
+(define-key evil-visual-state-map [escape] 'keyboard-quit)
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+#+end_src
+*** The Minibuffer
+
+Bind =C-w= to =evil-delete-backward-word= in the minibuffer... because
+it just makes sense (to me).
+
+#+begin_src emacs-lisp
+;;
+;; Get C-w in the minibuffer.
+;;
+(define-key minibuffer-local-map "\C-w" 'evil-delete-backward-word)
+(define-key minibuffer-local-ns-map "\C-w" 'evil-delete-backward-word)
+(define-key minibuffer-local-completion-map "\C-w" 'evil-delete-backward-word)
+(define-key minibuffer-local-must-match-map "\C-w" 'evil-delete-backward-word)
+(define-key minibuffer-local-isearch-map "\C-w" 'evil-delete-backward-word)
+#+end_src
+** Vim Plugin Replacements
+*** vim-surround
+
+[[https://github.com/timcharper/evil-surround][evil-surround]] emulates [[https://github.com/tpope/vim-surround][Tim Pope's vim-surround]].
+
+#+begin_src emacs-lisp
+  (use-package evil-surround
+    :ensure evil-surround
+    :config (global-evil-surround-mode 1))
+#+end_src
+
+*** vim-commentary
+
+[[https://github.com/tpope/vim-commentary][=vim-commentary=]] is a plugin by [[https://github.com/tpope][Tim Pope]] that I have been happy with
+on Vim. Here is where I attempt to get similar behaviour on Emacs.
+
+Note: There is also an [[https://github.com/redguardtoo/evil-nerd-commenter][Emacs port]] of Vim's [[https://github.com/scrooloose/nerdcommenter][NerdCommenter]].
+
+#+begin_src emacs-lisp
+(defun my-evil-comment-dwim ()
+  (interactive)
+  "Like 'comment-dwim', but switches to Insert state when inserting a comment and not operating on a region."
+  (unless (and mark-active transient-mark-mode)
+    (unless (evil-insert-state-p)
+  (evil-insert-state)))
+  (call-interactively #'comment-dwim))
+
+(define-key evil-normal-state-map (kbd "gc") #'my-evil-comment-dwim)
+#+end_src
+
+*TODO* The =gcu= binding is missing. The current solutions I've look
+at in Emacs either operate on a single line, or a visual selection. In
+=vim-commentary=, the =gcu= binding attempts to figure out a comment
+block that the cursor is in the middle of, then uncomments the entire
+block. This isn't super-duper important functionality, but I like
+it. I may have to implement this myself though.
+
+*** CtrlP
+
+Bind =C-p= to =my-find-file= so that we can get =CtrlP=-like
+functionality, just like in Vim!
+
+#+begin_src emacs-lisp
+;; Nothing emulates Vim's CtrlP plugin yet, but binding file-file to
+;; C-p will help me with my muscle memory. I may just need to wrap
+;; find-file with something that acts more CtrlP-like when I'm in a
+;; repository, otherwise it will just do the regular find-file (with
+;; ido-mode).
+;(define-key evil-normal-state-map "\C-p" 'ido-find-file)
+(define-key evil-normal-state-map "\C-p" 'my-find-file)
+#+end_src
 ** Evil Leader Configuration
 
 Set the =<Leader>=:
@@ -1392,106 +1584,15 @@ about auto-completion.
 (evil-leader/set-key "xm" 'helm-M-x)
 #+end_src
 
-** Evil Global Keybindings
+** Integration
 
-Bind =C-p= to =my-find-file= so that we can get =CtrlP=-like
-functionality, just like in Vim!
+This section deals with setup/integration of =evil-mode= with other
+modes that either don't work by default, or that I need to manually
+configure to my liking.
 
-#+begin_src emacs-lisp
-;; Nothing emulates Vim's CtrlP plugin yet, but binding file-file to
-;; C-p will help me with my muscle memory. I may just need to wrap
-;; find-file with something that acts more CtrlP-like when I'm in a
-;; repository, otherwise it will just do the regular find-file (with
-;; ido-mode).
-;(define-key evil-normal-state-map "\C-p" 'ido-find-file)
-(define-key evil-normal-state-map "\C-p" 'my-find-file)
-#+end_src
-
-Vim uses =C-6= to "switch to previous buffer". This allows one to keep
-hitting =C-6= to switch back and forth between two
-buffers. =evil-mode= doesn't implement this, so we need to implement
-this ourselves:
-
-#+begin_src emacs-lisp
-;; use C-6 to swap to a previous buffer
-(define-key evil-normal-state-map (kbd "C-6") 'evil-buffer)
-#+end_src
-
-** The =Escape= Key
-
-Make the =escape= key cancel all the things.
-
-Sources:
-- https://github.com/davvil/.emacs.d/blob/64367f2/init.el#L19
-
-#+begin_src emacs-lisp
-;;
-;; The Escape Key: Make it cancel everything...
-;;
-(defun minibuffer-keyboard-quit ()
-  "Abort recursive edit.
-In Delete Selection mode, if the mark is active, just deactivate it;
-then it takes a second \\[keyboard-quit] to abort the minibuffer."
-  (interactive)
-  (if (and delete-selection-mode transient-mark-mode mark-active)
-      (setq deactivate-mark  t)
-    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
-    (abort-recursive-edit)))
-
-(define-key evil-normal-state-map [escape] 'keyboard-quit)
-(define-key evil-visual-state-map [escape] 'keyboard-quit)
-(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-#+end_src
-
-** The Minibuffer
-
-Bind =C-w= to =evil-delete-backward-word= in the minibuffer... because
-it just makes sense (to me).
-
-#+begin_src emacs-lisp
-;;
-;; Get C-w in the minibuffer.
-;;
-(define-key minibuffer-local-map "\C-w" 'evil-delete-backward-word)
-(define-key minibuffer-local-ns-map "\C-w" 'evil-delete-backward-word)
-(define-key minibuffer-local-completion-map "\C-w" 'evil-delete-backward-word)
-(define-key minibuffer-local-must-match-map "\C-w" 'evil-delete-backward-word)
-(define-key minibuffer-local-isearch-map "\C-w" 'evil-delete-backward-word)
-#+end_src
-
-** Replace =vim-commentary=
-
-[[https://github.com/tpope/vim-commentary][=vim-commentary=]] is a plugin by [[https://github.com/tpope][Tim Pope]] that I have been happy with
-on Vim. Here is where I attempt to get similar behaviour on Emacs.
-
-Note: There is also an [[https://github.com/redguardtoo/evil-nerd-commenter][Emacs port]] of Vim's [[https://github.com/scrooloose/nerdcommenter][NerdCommenter]].
-
-#+begin_src emacs-lisp
-(defun my-evil-comment-dwim ()
-  (interactive)
-  "Like 'comment-dwim', but switches to Insert state when inserting a comment and not operating on a region."
-  (unless (and mark-active transient-mark-mode)
-    (unless (evil-insert-state-p)
-  (evil-insert-state)))
-  (call-interactively #'comment-dwim))
-
-(define-key evil-normal-state-map (kbd "gc") #'my-evil-comment-dwim)
-#+end_src
-
-*TODO* The =gcu= binding is missing. The current solutions I've look
-at in Emacs either operate on a single line, or a visual selection. In
-=vim-commentary=, the =gcu= binding attempts to figure out a comment
-block that the cursor is in the middle of, then uncomments the entire
-block. This isn't super-duper important functionality, but I like
-it. I may have to implement this myself though.
-
-** Integrate =evil-mode= and =ibuffer-mode=
-
-Configure =evil-mode= and =ibuffer-mode= to work together.
+*** ibuffer-mode
+    
+Integrate =ibuffer-mode= with =evil-mode=.
 
 #+begin_src emacs-lisp
   ;; Start ibuffer-mode out in 'normal' state
@@ -1516,9 +1617,9 @@ Configure =evil-mode= and =ibuffer-mode= to work together.
 
 #+end_src
 
-** =org-mode=
-
-Configure =evil-mode= and =org-mode= to work together:
+*** org-mode
+    
+Integrate =evil-mode= into =org-mode=.
 
 #+begin_src emacs-lisp
 ;; org-mode Mappings
