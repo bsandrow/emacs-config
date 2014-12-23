@@ -1230,6 +1230,94 @@ Emulate Vim's =:set wrap= and =:set nowrap=:
   (evil-ex-define-cmd "nowrap" 'bjs/evil-ex-nowrap)
 #+end_src
 
+[[http://permalink.gmane.org/gmane.emacs.vim-emulation/1496][Some Explanation on Ex commands + args + completion]]:
+
+#+start_quote
+>
+> I have following command:
+>
+> (evil-ex-define-cmd "Rcontroller" 'rinari-find-controller)
+>
+> What should i do to provide completion for it?
+
+First of all, the completion code is not stable yet in the sense that
+I'm going to change the interface a little bit in the near future. But
+the general actions to take will remain the same, so everything that
+works now should be easily adaptable to the new interface.
+
+In order to get completion working you need two things: an argument
+handler doing the completion and a special interactive code that can be
+used in commands to tell ex state that this specific completion should
+be used (not completely true, the interactive code is optional, see
+below).
+
+The argument handler must be defined using
+`evil-ex-define-argument-type'. This is a macro taking at least one
+argument, the first being a flag, the others depending on that flag, so
+it looks like this:
+
+(evil-define-argument-type my-type (flag &rest args)
+   "Documentation"
+   ...)
+
+FLAG is a symbol, on of 'start, 'stop, 'update or 'complete. For
+completion only 'complete is important. In this case ARGS are three
+arguments STRING PREDICATE FLAG with exactly the same interpretation as
+the COLLECTION function in "Programmed completion" (see Emacs Lisp
+Manual). You have to implement exactly the requested behavior of this
+COLLECTION function. The easiest example is the definition of a
+"buffer" argument in "evil-ex.el".
+
+Once the argument-type is defined an interactive code must be specified
+using `evil-define-interactive-code' (see "evil-types.el" for most
+evil-specific interactive codes). It looks like this:
+
+(evil-define-interactive-code "<mycode>"
+  "Documentation"
+  :ex-arg my-type
+  (list (when (evil-ex-p) evil-ex-argument)))
+
+This defines an interactive code "<mycode>" that can be used in the
+(interactive ...) statement in commands defined with
+`evil-define-command'. The property ":ex-arg" connects that interactive
+code with the argument-type "my-type" (if no such property is given
+then the argument is plain text and has no completion). The body should
+evaluate to a list-expression. This list will be passed to a command
+using this interactive code as parameter(s) (as usual Emacs interactive
+codes do).
+
+Finally you must define a command using this interactive code like this:
+
+(evil-define-command rinari-find-controller (arg)
+  "Documentation"
+  (interactive "<mycode>")
+  ...)
+
+When such a command is bound to some ex string the corresponding
+argument-handler is called for completion.
+
+Ah, I forgot, it is not really required to define an interactive code.
+You could also specify the argument-type directly in the command like
+this:
+
+(evil-define-command rinari-find-controller (arg)
+  "Documentation"
+  :ex-arg my-type
+  (interactive "<a>")
+  ...)
+
+(here <a> is the interactive code for a general ex-argument). But if
+you require the same argument type for several commands, defining an
+interactive code is easier. And defining an interactive code allows to
+generate more than a single argument passed to the command (see, e.g.,
+the <r> code for an example).
+
+I hope that gives you a starting point. If you have any questions,
+don't hesitate to ask.
+
+Frank
+#+end_quote
+
 ** Evil Leader Configuration
 
 Set the =<Leader>=:
