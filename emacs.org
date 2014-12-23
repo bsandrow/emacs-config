@@ -1459,6 +1459,21 @@ it just makes sense (to me).
 (define-key minibuffer-local-must-match-map "\C-w" 'evil-delete-backward-word)
 (define-key minibuffer-local-isearch-map "\C-w" 'evil-delete-backward-word)
 #+end_src
+*** hlsearch
+
+Use [[https://github.com/juanjux/evil-search-highlight-persist][evil-search-highlight-persist]] to get Vim's =hlsearch=
+functionality.
+
+(Turned off for now.)
+
+#+begin_src emacs-lisp :tangle no
+  (use-package evil-search-highlight-persist
+    :ensure evil-search-highlight-persist
+    :config (progn
+              (global-evil-search-highlight-persist t)
+              (evil-ex-define-cmd "noh[lsearch]" 'search-highlight-persist-remove-all)))
+#+end_src
+
 ** Vim Plugin Replacements
 *** vim-surround
 
