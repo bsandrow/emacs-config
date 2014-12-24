@@ -2026,6 +2026,10 @@ source (someone's =.emacs.d= on [[https://github.com][Github]]).
 
 http://capitaomorte.github.io/yasnippet/snippet-expansion.html
 
+** TODO Checkout emacs-ansible
+
+https://github.com/k1LoW/emacs-ansible/blob/master/ansible.el
+
 ** TODO What's the best way to track project root?
 
 Is the best way to just continue using Projectile? I mainly started
