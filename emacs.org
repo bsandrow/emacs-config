@@ -2022,6 +2022,10 @@ source (someone's =.emacs.d= on [[https://github.com][Github]]).
   :PROPERTIES:
   :tangle: no
   :END:
+** TODO Read up on YASnippet
+
+http://capitaomorte.github.io/yasnippet/snippet-expansion.html
+
 ** TODO What's the best way to track project root?
 
 Is the best way to just continue using Projectile? I mainly started
