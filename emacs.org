@@ -2026,6 +2026,10 @@ source (someone's =.emacs.d= on [[https://github.com][Github]]).
 
 http://capitaomorte.github.io/yasnippet/snippet-expansion.html
 
+** TODO magit + squashing commits
+
+http://howardism.org/Technical/Emacs/magit-squashing.html
+
 ** TODO Checkout emacs-ansible
 
 https://github.com/k1LoW/emacs-ansible/blob/master/ansible.el
