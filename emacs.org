@@ -1168,7 +1168,8 @@ Defer loading of =pomodoro= until =pomodoro-start= is called.
 
 Make Emacs a little more *evil*...
 
-** evil-leader
+** Initialize
+*** =evil-leader=
 
 =evil-leader-mode= needs to be started prior to =evil-mode= per the
 [[https://github.com/cofi/evil-leader#usage][documentation]].
@@ -1179,7 +1180,7 @@ Make Emacs a little more *evil*...
     :config (global-evil-leader-mode))
 #+end_src
 
-** Initialize
+*** =evil-mode=
 
 Make sure that =evil-mode= is installed and enabled.
 
