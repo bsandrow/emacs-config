@@ -1933,10 +1933,17 @@ Use nvm.el to globally setup NVM environment.
 
 ** Zsh
 
+Turn on =sh-mode= for =*.zsh= and =*.zsh-theme= files:
+
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.zsh\\'" . sh-mode))
   (add-to-list 'auto-mode-alist '("\\.zsh-theme\\'" . sh-mode))
+#+end_src
 
+Trigger =sh-mode= to recognize =*.zsh= and =*.zsh-theme= files as
+z-shell:
+
+#+begin_src emacs-lisp
   (defun bjs/zsh-hook ()
     (if (string-match "\\.zsh(-theme)?$" buffer-file-name)
         (sh-set-shell "zsh")))
