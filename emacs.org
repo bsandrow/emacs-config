@@ -1931,6 +1931,19 @@ Use nvm.el to globally setup NVM environment.
       (append-to-exec-path "/Users/bjs/.nvm/v0.10.21/bin")))
 #+end_src
 
+** Zsh
+
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.zsh\\'" . sh-mode))
+  (add-to-list 'auto-mode-alist '("\\.zsh-theme\\'" . sh-mode))
+
+  (defun bjs/zsh-hook ()
+    (if (string-match "\\.zsh(-theme)?$" buffer-file-name)
+        (sh-set-shell "zsh")))
+
+  (add-hook 'sh-mode-hook 'bjs/zsh-hook)
+#+end_src
+
 * Text Editing
 ** Markdown
 
