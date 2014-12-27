@@ -1959,6 +1959,8 @@ z-shell:
   (add-hook 'sh-mode-hook 'bjs/zsh-hook)
 #+end_src
 
+*Sources*: [[http://stackoverflow.com/questions/20558402/open-zsh-scripts-in-sh-mode-in-emacs][#1]]
+
 * Text Editing
 ** Markdown
 
