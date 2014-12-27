@@ -1483,6 +1483,24 @@ functionality.
               (evil-ex-define-cmd "noh[lsearch]" 'search-highlight-persist-remove-all)))
 #+end_src
 
+*** enew Command
+
+I miss the =:enew= command. I want an easy way to create a new empty
+buffer that doesn't necessarily have a filename tied to it. Someone
+has already [[https://github.com/echristopherson/.emacs.d/blob/master/init.el#L117][re-implemented it in their .emacs]].
+
+#+begin_src emacs-lisp
+  (evil-define-command evil-buffer-new ()
+    "Opens a new buffer in the current window."
+    :repeat nil
+    (let ((buffer (generate-new-buffer "*new*")))
+      (set-window-buffer (selected-window) buffer)
+      (with-current-buffer buffer
+        (evil-normal-state))))
+
+  (evil-ex-define-cmd "enew" 'evil-buffer-new)
+#+end_src
+
 ** Vim Plugin Replacements
 *** vim-surround
 
