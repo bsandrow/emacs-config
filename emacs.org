@@ -1501,6 +1501,22 @@ has already [[https://github.com/echristopherson/.emacs.d/blob/master/init.el#L1
   (evil-ex-define-cmd "enew" 'evil-buffer-new)
 #+end_src
 
+*** Yank to End of Line
+
+Vim binds =Y= to the same as =yy= (yank line). In Vim, this doesn't
+match up with other sets of keystrokes (e.g. =dd= deletes the line,
+=D= deletes to end of line, =cc= 'changes' the line, =C= 'changes' to
+end of line). My =.vimrc= binds =Y= to 'yank to end of line.' Let's do
+the same here. [[http://mattbriggs.net/blog/2012/02/27/awesome-emacs-plugins-evil-mode/][Someone already did]].
+
+#+begin_src emacs-lisp
+  (defun evil-copy-to-end-of-line ()
+    (interactive)
+    (evil-yank (point) (point-at-eol)))
+
+  (define-key evil-normal-state-map "Y" 'evil-copy-to-end-of-line)
+#+end_src
+
 ** Vim Plugin Replacements
 *** vim-surround
 
