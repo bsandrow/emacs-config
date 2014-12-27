@@ -938,7 +938,7 @@ them, etc). It's somewhat analogous to BufferExplorer in Vim, though I
 feel like =ibuffer-mode= has more functionality.
 
 #+begin_src emacs-lisp
-  (defun my-ibuffer-vc-hook ()
+  (defun bjs/ibuffer-vc-hook ()
     "Use ibuffer-vc to group by project root."
     (ibuffer-vc-set-filter-groups-by-vc-root)
     (unless (eq ibuffer-sorting-mode 'alphabetic)
@@ -950,7 +950,7 @@ feel like =ibuffer-mode= has more functionality.
     :defer 1
     :config
     (progn
-      (add-hook 'ibuffer-hook 'my-ibuffer-vc-hook)))
+      (add-hook 'ibuffer-hook 'bjs/ibuffer-vc-hook)))
 
   (use-package ibuffer-vc
     :ensure ibuffer-vc
