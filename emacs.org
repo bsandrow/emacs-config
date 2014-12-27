@@ -324,6 +324,14 @@ The =use-package= package.
 #+end_src
 
 * General Configuration
+** Default Mode
+
+[[http://www.gnu.org/software/emacs/manual/html_node/emacs/Init-Examples.html][Set the default mode to =text-mode=]]
+
+#+begin_src emacs-lisp
+  (setq-default major-mode 'text-mode)
+#+end_src
+
 ** History
 
 Use =savehist-mode= to store the minibuffer history. I picked up
