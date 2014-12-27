@@ -580,14 +580,14 @@ their naming.)
 [[http://stackoverflow.com/questions/69934/set-4-space-indent-in-emacs-in-text-mode][Tabstops]]
 
 #+begin_src emacs-lisp
-(defun my-generate-tab-stops (&optional width max)
+(defun bjs/generate-tab-stops (&optional width max)
   "Return a sequence suitable for `tab-stop-list'."
   (let* ((max-column (or max 200))
          (tab-width (or width tab-width))
          (count (/ max-column tab-width)))
     (number-sequence tab-width (* tab-width count) tab-width)))
 
-(setq tab-stop-list (my-generate-tab-stops))
+(setq tab-stop-list (bjs/generate-tab-stops))
 #+end_src
 
 I'm not entirely sure on this guy. I probably grabbed it from
@@ -1023,7 +1023,7 @@ Some scratch work:
       :config
       (progn
         (ido-mode t)
-        (add-hook 'ido-setup-hook 'my-ido-keymap-mods)))
+        (add-hook 'ido-setup-hook 'bjs/ido-keymap-mods)))
 #+end_src
 
 I prefer my matches to be shown vertically (like Vim's [[https://github.com/kien/ctrlp.vim][CtrlP]] or
@@ -1067,7 +1067,7 @@ Let's tie that all together then. If we're in a project, then use
 very basic for the time-being, but I'll improve it over time.
 
 #+begin_src emacs-lisp
-  (defun my-find-file ()
+  (defun bjs/find-file ()
     "Open file using projectile or ido"
     (interactive)
     (if (projectile-project-p)
@@ -1083,7 +1083,7 @@ functionality. I've also mapped out what the changes are in the
 comments (e.g. old-binding => new-binding), just for sanity's sake.
 
 #+begin_src emacs-lisp
-  (defun my-ido-keymap-mods ()
+  (defun bjs/ido-keymap-mods ()
     "Changes to the default ido-mode keymaps"
     ;; ido-common-completion-map
     ;; -------------------------
@@ -1536,7 +1536,7 @@ on Vim. Here is where I attempt to get similar behaviour on Emacs.
 Note: There is also an [[https://github.com/redguardtoo/evil-nerd-commenter][Emacs port]] of Vim's [[https://github.com/scrooloose/nerdcommenter][NerdCommenter]].
 
 #+begin_src emacs-lisp
-(defun my-evil-comment-dwim ()
+(defun bjs/evil-comment-dwim ()
   (interactive)
   "Like 'comment-dwim', but switches to Insert state when inserting a comment and not operating on a region."
   (unless (and mark-active transient-mark-mode)
@@ -1544,7 +1544,7 @@ Note: There is also an [[https://github.com/redguardtoo/evil-nerd-commenter][Ema
   (evil-insert-state)))
   (call-interactively #'comment-dwim))
 
-(define-key evil-normal-state-map (kbd "gc") #'my-evil-comment-dwim)
+(define-key evil-normal-state-map (kbd "gc") #'bjs/evil-comment-dwim)
 #+end_src
 
 *TODO* The =gcu= binding is missing. The current solutions I've look
@@ -1556,7 +1556,7 @@ it. I may have to implement this myself though.
 
 *** CtrlP
 
-Bind =C-p= to =my-find-file= so that we can get =CtrlP=-like
+Bind =C-p= to =bjs/find-file= so that we can get =CtrlP=-like
 functionality, just like in Vim!
 
 #+begin_src emacs-lisp
@@ -1566,7 +1566,7 @@ functionality, just like in Vim!
 ;; repository, otherwise it will just do the regular find-file (with
 ;; ido-mode).
 ;(define-key evil-normal-state-map "\C-p" 'ido-find-file)
-(define-key evil-normal-state-map "\C-p" 'my-find-file)
+(define-key evil-normal-state-map "\C-p" 'bjs/find-file)
 #+end_src
 ** Evil Leader Configuration
 
@@ -1794,8 +1794,8 @@ Use [[https://launchpad.net/python-mode][=python-mode=]] to edit Python code. (B
       :interpreter ("python" . python-mode)
       :config
       (progn
-        (add-hook 'python-mode-hook 'my-python-mode-prog-mode-fix)
-        (add-hook 'python-mode-hook 'my-python-mode-indentation)
+        (add-hook 'python-mode-hook 'bjs/python-mode-prog-mode-fix)
+        (add-hook 'python-mode-hook 'bjs/python-mode-indentation)
         ;; Should I move this to the color-identifiers-mode config?
         (add-hook 'python-mode-hook 'color-identifiers-mode)))
 #+end_src
@@ -1803,7 +1803,7 @@ Use [[https://launchpad.net/python-mode][=python-mode=]] to edit Python code. (B
 Configure =python-mode='s indentation.
 
 #+begin_src emacs-lisp
-  (defun my-python-mode-indentation-config ()
+  (defun bjs/python-mode-indentation ()
     "Configure python-mode indentation variables"
     ;; 4 spaces for Python. Set this explicitly just to
     ;; make sure. I want all Python files using 4 spaces.
@@ -1822,7 +1822,7 @@ activate. We can fix that though. We have the technology...
   ;; For some reason python-mode doesn't derive from prog-mode, so they
   ;; prog-mode-hooks don't get run. See more here:
   ;;   https://github.com/flycheck/flycheck/issues/97
-  (defun my-python-mode-prog-mode-fix ()
+  (defun bjs/python-mode-prog-mode-fix ()
     (run-hooks 'prog-mode-hook))
 #+end_src
 
@@ -2163,7 +2163,7 @@ designed to be "sourced" in the shell, but here its result gets
 imported into a single Emacs buffer:
 
 #+begin_src emacs-lisp :tangle no
-(defun my-guile-setup ()
+(defun bjs/guile-setup ()
   (make-local-variable 'process-environment)
   (with-temp-buffer
     (call-process "bash" nil t nil "-c"
@@ -2175,7 +2175,7 @@ imported into a single Emacs buffer:
           process-environment))
       (forward-line 1))))
 
-(add-hook 'guile-hook 'my-guile-setup)
+(add-hook 'guile-hook 'bjs/guile-setup)
 #+end_src
 
 Need to set jshintrc in the hook maybe?
