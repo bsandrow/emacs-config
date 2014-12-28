@@ -911,8 +911,9 @@ Install / Configure color themes. :)
   ;(load-theme 'base16-ocean-dark t)
   ;(load-theme 'base16-flat-dark t)
   ;(load-theme 'spacegray t)
-  (load-theme 'solarized-dark t)
-  (load-theme 'solarized-light t)
+  ;(load-theme 'solarized-dark t)
+  ;(load-theme 'solarized-light t)
+  (load-theme 'leuven t)
 #+end_src
 
 *Resources:*
