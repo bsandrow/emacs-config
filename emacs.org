@@ -1780,6 +1780,19 @@ the standard magit modes.
       (add-hook 'js2-mode 'flycheck-mode)))
 #+end_src
 
+** JSON
+
+Use [[https://github.com/joshwnj/json-mode][json-mode]], which extends =js-mode= to work better on json files.
+
+#+begin_src emacs-lisp
+  (use-package json-mode
+    :ensure json-mode
+    :mode (("\\.json\\'" . json-mode)
+           ("\\.json\\.erb\\'" . json-mode))
+    :defer t
+    :commands json-mode)
+#+end_src
+
 ** Python
 
 Use [[https://launchpad.net/python-mode][=python-mode=]] to edit Python code. (By jove! I think he's onto something!)
