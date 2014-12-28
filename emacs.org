@@ -1207,7 +1207,7 @@ Make sure that =evil-mode= is installed and enabled.
 
 [[http://permalink.gmane.org/gmane.emacs.vim-emulation/1496][Some Explanation on Ex commands + args + completion]]:
 
-#+start_quote
+#+begin_src
 >
 > I have following command:
 >
@@ -1291,7 +1291,7 @@ I hope that gives you a starting point. If you have any questions,
 don't hesitate to ask.
 
 Frank
-#+end_quote
+#+end_src
 
 ** Vim Fixes
 
