@@ -1058,6 +1058,7 @@ Use [[https://github.com/bbatsov/projectile][Projectile]] for in-project searchi
 #+begin_src emacs-lisp
   (use-package projectile
     :ensure projectile
+    :diminish ""
     :config (projectile-global-mode))
 #+end_src
 
