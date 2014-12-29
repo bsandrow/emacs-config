@@ -1894,6 +1894,17 @@ activate. We can fix that though. We have the technology...
 *TODO* Getting VirtualENVs setup if in the correct directory.
 *TODO* Get virstualenvs and flycheck-mode working.
 
+** Less
+
+#+begin_src emacs-lisp
+  (use-package less-css-mode
+    :ensure less-css-mode
+    :config
+    (progn
+      (add-hook 'less-css-mode-hook 'color-identifiers-mode)
+      (add-hook 'less-css-mode-hook 'flycheck-mode)))
+#+end_src
+
 ** SASS
 
 Use =scss-mode= ([[https://github.com/antonj/scss-mode/][Github]], [[http://www.emacswiki.org/ScssMode][EmacsWiki]]) to handle [[http://sass-lang.com/][Sass]] files. I've turned
