@@ -242,19 +242,17 @@ elisp packages that I don't install from ELPA.
 
 ** Exec Path
 
-The =exec-path= variable doesn't seem to get setup very well. I need
-to explicitly add =/usr/local/bin= to it:
+Use =exec-path-from-shell=:
 
 #+begin_src emacs-lisp
-  (defun append-to-exec-path (path)
-    "Add PATH to EXEC-PATH"
-    (when (file-accessible-directory-p path)
-      (when (not (member 'path exec-path))
-        (add-to-list 'exec-path path))
-      (when (not (member 'path (split-string (getenv "PATH") ":")))
-        (setenv "PATH" (concat path ":" (getenv "PATH"))))))
-
-  (append-to-exec-path "/usr/local/bin")
+  (use-package exec-path-from-shell
+    :ensure exec-path-from-shell
+    :init
+    (progn
+      (when (memq window-system '(mac ns))
+        (exec-path-from-shell-initialize)
+        (exec-path-from-shell-copy-env "PYTHONPATH")
+        (exec-path-from-shell-copy-env "WORKON_HOME"))))
 #+end_src
 
 ** Packages
