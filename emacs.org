@@ -1901,6 +1901,7 @@ activate. We can fix that though. We have the technology...
     :ensure less-css-mode
     :config
     (progn
+      (setq css-indent-offset 2)
       (add-hook 'less-css-mode-hook 'color-identifiers-mode)
       (add-hook 'less-css-mode-hook 'flycheck-mode)))
 #+end_src
