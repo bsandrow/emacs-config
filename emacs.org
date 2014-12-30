@@ -2070,6 +2070,21 @@ z-shell:
 
 *Sources*: [[http://stackoverflow.com/questions/20558402/open-zsh-scripts-in-sh-mode-in-emacs][#1]]
 
+* Config Files
+
+** SSH Config
+
+#+begin_src emacs-lisp
+  (use-package ssh-config-mode
+    ;:ensure ssh-config-mode
+    :defer 1
+    :commands ssh-config-mode
+    :mode ((".ssh/config\\'" . ssh-config-mode)
+           ("sshd?_config\\'" . ssh-config-mode)
+           ("known_hosts\\'" . ssh-config-mode)
+           ("authorized_keys2?\\'" . ssh-config-mode)))
+#+end_src
+
 * Text Editing
 ** Markdown
 
