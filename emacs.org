@@ -2178,6 +2178,13 @@ source (someone's =.emacs.d= on [[https://github.com][Github]]).
   :PROPERTIES:
   :tangle: no
   :END:
+** TODO Getting Flycheck working w/ python + virtualenv
+
+- [[https://github.com/flycheck/flycheck/issues/312][Flycheck Github: Open Issue for :cwd property]]
+- [[https://github.com/rejeep/f.el][File Functions]]
+- [[http://www.lunaryorn.com/2013/11/26/syntax-checker-executables-in-flycheck.html][Syntax Checker Executables in Flycheck]]
+- [[https://github.com/flycheck/flycheck/pull/272][Flycheck Github: Override Executables]]
+
 ** TODO Read up on YASnippet
 
 http://capitaomorte.github.io/yasnippet/snippet-expansion.html
