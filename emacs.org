@@ -240,21 +240,6 @@ elisp packages that I don't install from ELPA.
 (add-to-list 'load-path vendor-dir)
 #+end_src
 
-** Exec Path
-
-Use =exec-path-from-shell=:
-
-#+begin_src emacs-lisp
-  (use-package exec-path-from-shell
-    :ensure exec-path-from-shell
-    :init
-    (progn
-      (when (memq window-system '(mac ns))
-        (exec-path-from-shell-initialize)
-        (exec-path-from-shell-copy-env "PYTHONPATH")
-        (exec-path-from-shell-copy-env "WORKON_HOME"))))
-#+end_src
-
 ** Packages
 
 Setup Emacs Lisp Package Archive (ELPA -- part of Emacs 24):
@@ -311,6 +296,33 @@ The =use-package= package.
                     gitconfig-mode
                     gitignore-mode
                     gitattributes-mode))
+#+end_src
+
+** Exec Path
+
+Use =exec-path-from-shell=:
+
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :ensure exec-path-from-shell
+    :init
+    (progn
+      (when (memq window-system '(mac ns))
+        (exec-path-from-shell-initialize)
+        (exec-path-from-shell-copy-env "PYTHONPATH")
+        (exec-path-from-shell-copy-env "WORKON_HOME"))))
+#+end_src
+
+Convenience function:
+
+#+begin_src emacs-lisp
+  (defun append-to-exec-path (path)
+    "Add PATH to EXEC-PATH"
+    (when (file-accessible-directory-p path)
+      (when (not (member 'path exec-path))
+        (add-to-list 'exec-path path))
+      (when (not (member 'path (split-string (getenv "PATH") ":")))
+        (setenv "PATH" (concat path ":" (getenv "PATH"))))))
 #+end_src
 
 ** Diminish
@@ -1139,6 +1151,21 @@ myself into using it more regularly.
 The rest of the configuration is in =evil-mode= config right now...
 
 * Organization
+** Remember-Mode
+
+#+begin_src emacs-lisp
+  (defadvice remember-other-frame (around remember-frame-parameters activate)
+        "Set some frame parameters for the remember frame."
+        (let ((default-frame-alist (append '((name . "*Remember*")
+                                             (width . 80)
+                                             (height . 10)
+                                             (vertical-scroll-bars . nil)
+                                             (menu-bar-lines . 0)
+                                             (tool-bar-lines . 0))
+                                           default-frame-alist)))
+          ad-do-it))
+#+end_src
+
 ** Org-Mode
 
 See [[file:org.org][init-org.el]] for details on my [[http://orgmode.org][Org-Mode]] settings.
@@ -2179,6 +2206,11 @@ source (someone's =.emacs.d= on [[https://github.com][Github]]).
   :PROPERTIES:
   :tangle: no
   :END:
+** TODO Remember Mode
+
+- http://emacsrookie.com/2011/09/13/do-you-remember/
+- http://sachachua.com/blog/2010/09/new-note-taking-workflow-with-emacs-org-mode/
+
 ** TODO Getting Flycheck working w/ python + virtualenv
 
 - [[https://github.com/flycheck/flycheck/issues/312][Flycheck Github: Open Issue for :cwd property]]
