@@ -333,6 +333,31 @@ Convenience function:
     :defer 1)
 #+end_src
 
+** Desktop
+
+Turn =desktop-save-mode= on:
+
+#+begin_src emacs-lisp
+  (desktop-save-mode t)
+#+end_src
+
+[[https://github.com/milkypostman/powerline/issues/58#issuecomment-60395853][Workaround]] for [[https://github.com/milkypostman/powerline/issues/58][bad interaction]] between =powerline= and
+=desktop-save-mode=:
+
+#+begin_src emacs-lisp
+  (add-hook 'desktop-after-read-hook 'powerline-reset)
+#+end_src
+
+This only seems to work for the fore-front frame. You have to manually
+run =powerline-reset= on the other frames. Maybe this will work:
+
+#+begin_src emacs-lisp
+  (defun bjs/powerline-delete-cache ()
+    (set-frame-parameter nil 'powerline-cache nil))
+
+  (add-hook 'desktop-save-hook 'bjs/powerline-delete-cache)
+#+end_src
+
 * General Configuration
 ** Default Mode
 
@@ -840,6 +865,7 @@ correct colors.
 
 #+begin_src emacs-lisp
   (use-package powerline
+    :commands (powerline powerline-reset)
     :config
     (progn
       (bsandrow/powerline-fix-separator-pixmaps)
